@@ -121,12 +121,29 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('Apply Now'),
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            child: const Text('Apply Now'),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {
+                              // Remplacez 'your-job-id' par un ID de job réel de votre API
+                              Navigator.pushNamed(
+                                context,
+                                '/job-details',
+                                arguments: 'jepP1lkX4HguINPq0vqs',
+                              );
+                            },
+                            child: const Text('View Details'),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -141,6 +158,7 @@ class HomePage extends StatelessWidget {
               },
               child: const Text('Open Jobs Page'),
             ),
+
           ],
         ),
       ),
