@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:job_board_flutter/core/bloc/cubit/theme_cubit.dart';
+import 'package:job_board_flutter/features/jobs/bloc/job_details_cubit.dart';
+import 'package:job_board_flutter/features/jobs/data/repositories/job_repository.dart';
+import 'package:job_board_flutter/features/jobs/pages/job_details_page.dart';
 import 'package:job_board_flutter/utils/theme/dark_theme.dart';
 import 'package:job_board_flutter/utils/theme/light_theme.dart';
+import 'package:http/http.dart' as http;
+import 'package:job_board_flutter/features/jobs/data/datasources/job_remote_datasource.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +16,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -22,13 +26,29 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'Job Board Flutter',
             debugShowCheckedModeBanner: false,
-
-            // Apply the themes we defined
             theme: AppLightTheme.lightTheme,
             darkTheme: AppDarkTheme.darkTheme,
             themeMode: state.themeMode,
-
             home: const HomePage(),
+            onGenerateRoute: (settings) {
+              if (settings.name == '/job-details') {
+                final jobId = settings.arguments as String;
+
+                return MaterialPageRoute(
+                  builder: (context) => BlocProvider(
+                    create: (context) {
+                      final httpClient = http.Client();
+                      final jobRemoteDataSource = JobRemoteDataSource(httpClient);
+                      final jobRepository = JobRepository(jobRemoteDataSource);
+                      return JobDetailsCubit(repository: jobRepository)
+                        ..loadJobDetails(jobId);
+                    },
+                    child: const JobDetailsPage(),
+                  ),
+                );
+              }
+              return null;
+            },
           );
         },
       ),
@@ -119,17 +139,35 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('Apply Now'),
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            child: const Text('Apply Now'),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {
+                              // Remplacez 'your-job-id' par un ID de job réel de votre API
+                              Navigator.pushNamed(
+                                context,
+                                '/job-details',
+                                arguments: 'jepP1lkX4HguINPq0vqs',
+                              );
+                            },
+                            child: const Text('View Details'),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
             ),
+
           ],
         ),
       ),
