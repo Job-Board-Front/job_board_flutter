@@ -4,7 +4,7 @@ import 'package:job_board_flutter/core/bloc/cubit/theme_cubit.dart';
 import 'package:job_board_flutter/utils/theme/dark_theme.dart';
 import 'package:job_board_flutter/utils/theme/light_theme.dart';
 
-import 'core/features/jobs/pages/jobs_page.dart';
+import 'features/jobs/pages/jobs_page.dart';
 
 void main() {
   runApp(const MyApp());
