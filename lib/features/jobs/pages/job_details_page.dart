@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:job_board_flutter/core/widgets/app_drawer.dart';
+import 'package:job_board_flutter/core/widgets/app_navbar.dart';
 import 'package:job_board_flutter/features/jobs/bloc/job_details_cubit.dart';
 import 'package:job_board_flutter/features/jobs/bloc/job_details_state.dart';
+import 'package:job_board_flutter/features/jobs/widgets/back_to_jobs.dart';
 import 'package:job_board_flutter/features/jobs/widgets/job_actions_bar.dart';
 import 'package:job_board_flutter/features/jobs/widgets/job_description.dart';
 import 'package:job_board_flutter/features/jobs/widgets/job_details_card.dart';
@@ -14,7 +17,8 @@ class JobDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Job Details')),
+      appBar: AppNavbar(),
+      drawer: AppDrawer(),
       bottomNavigationBar: const JobActionsBar(),
       body: BlocBuilder<JobDetailsCubit, JobDetailsState>(
         builder: (context, state) {
@@ -31,6 +35,11 @@ class JobDetailsPage extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: BackToJobsButton(),
+                ),
+                const SizedBox(height: 16),
                 JobHeader(job: job),
                 const SizedBox(height: 24),
                 JobDescription(description: job.description),

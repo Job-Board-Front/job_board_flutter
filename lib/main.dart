@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:job_board_flutter/core/bloc/cubit/theme_cubit.dart';
+import 'package:job_board_flutter/core/widgets/app_drawer.dart';
+import 'package:job_board_flutter/core/widgets/app_navbar.dart';
 import 'package:job_board_flutter/features/jobs/bloc/job_details_cubit.dart';
 import 'package:job_board_flutter/features/jobs/data/repositories/job_repository.dart';
 import 'package:job_board_flutter/features/jobs/pages/job_details_page.dart';
@@ -62,7 +64,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: const Text('Job Board'),
         actions: [
           IconButton(
@@ -76,7 +78,9 @@ class HomePage extends StatelessWidget {
             },
           ),
         ],
-      ),
+      ),*/
+      appBar: AppNavbar(),
+      drawer: AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
