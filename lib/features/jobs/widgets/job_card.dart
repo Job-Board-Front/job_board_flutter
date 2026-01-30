@@ -309,18 +309,15 @@ class JobCard extends StatelessWidget {
 
               SizedBox(
                 width: double.infinity,
-                child: Expanded(
-                  child: OutlinedButton(
-                    onPressed: () {
-                      // Remplacez 'your-job-id' par un ID de job réel de votre API
-                      Navigator.pushNamed(
-                        context,
-                        '/job-details',
-                        arguments: this.job.id,
-                      );
-                    },
-                    child: const Text('View Details'),
-                  ),
+                child: OutlinedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/job-details',
+                      arguments: job.id,
+                    );
+                  },
+                  child: const Text('View Details'),
                 ),
               ),
             ],

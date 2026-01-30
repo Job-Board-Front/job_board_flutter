@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import '../../../core/widgets/app_drawer.dart';
+import '../../../core/widgets/app_navbar.dart';
 import '../bloc/jobs_cubit.dart';
 import '../bloc/jobs_state.dart';
 import '../data/datasources/job_remote_datasource.dart';
@@ -34,21 +36,8 @@ class _HomePageState extends State<HomePage> {
     return BlocProvider.value(
       value: cubit,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Job Board'),
-          actions: [
-            IconButton(
-              icon: Icon(
-                Theme.of(context).brightness == Brightness.dark
-                    ? Icons.light_mode
-                    : Icons.dark_mode,
-              ),
-              onPressed: () {
-                context.read<ThemeCubit>().toggleTheme();
-              },
-            ),
-          ],
-        ),
+        appBar: AppNavbar(),
+        drawer: AppDrawer(),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
           child: BlocBuilder<JobsCubit, JobsState>(

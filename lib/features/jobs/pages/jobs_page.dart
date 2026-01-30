@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import '../../../core/widgets/app_drawer.dart';
+import '../../../core/widgets/app_navbar.dart';
 import '../bloc/jobs_cubit.dart';
 import '../bloc/jobs_state.dart';
 import '../data/datasources/job_remote_datasource.dart';
@@ -52,7 +54,8 @@ class _JobsPageState extends State<JobsPage> {
     return BlocProvider.value(
       value: cubit,
       child: Scaffold(
-        appBar: AppBar(title: const Text('All Jobs')),
+        appBar: AppNavbar(),
+        drawer: AppDrawer(),
         body: SafeArea(
           child: BlocBuilder<JobsCubit, JobsState>(
             builder: (context, state) {
@@ -79,7 +82,7 @@ class _JobsPageState extends State<JobsPage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Browse through $jobCount available positions',
+                      'Explore top career opportunities from leading companies',
                       style: TextStyle(color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 24),

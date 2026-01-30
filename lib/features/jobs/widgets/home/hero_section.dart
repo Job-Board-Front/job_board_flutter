@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../pages/jobs_page.dart';
+
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
 
@@ -63,7 +65,10 @@ class HeroSection extends StatelessWidget {
           children: [
             ElevatedButton.icon(
               onPressed: () {
-                Navigator.pushNamed();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const JobsPage()),
+                );
               },
               icon: const Icon(Icons.arrow_forward),
               label: const Text('Browse All Jobs'),

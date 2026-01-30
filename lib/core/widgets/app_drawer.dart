@@ -1,5 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:job_board_flutter/features/jobs/pages/home_page.dart';
+
+import '../../features/jobs/pages/jobs_page.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -81,8 +84,7 @@ class AppDrawer extends StatelessWidget {
                   ),
                   title: const Text('Home'),
                   onTap: () {
-                    Navigator.pop(context);
-                    // TODO: Naviguer vers Home
+                    Navigator.pop(context, MaterialPageRoute(builder: (_) => const HomePage()),);
                   },
                 ),
                 ListTile(
@@ -92,8 +94,7 @@ class AppDrawer extends StatelessWidget {
                   ),
                   title: const Text('Jobs'),
                   onTap: () {
-                    Navigator.pop(context);
-                    // TODO: Naviguer vers Jobs
+                    Navigator.pop(context, MaterialPageRoute( builder: (_) => const JobsPage()),);
                   },
                 ),
                 ListTile(
