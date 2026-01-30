@@ -22,7 +22,7 @@ class BackToJobsButton extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              'Back to jobs',
+              'Back',
               style: TextStyle(
                 color: isDark ? Colors.white : Colors.black,
                 fontSize: 16,

@@ -21,42 +21,44 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ThemeCubit()..loadTheme(),
-      child: BlocConsumer<ThemeCubit, ThemeState>(
-        listener: (context, state) => {},
-        builder: (context, state) {
-          return MaterialApp(
-            title: 'Job Board Flutter',
-            debugShowCheckedModeBanner: false,
-            theme: AppLightTheme.lightTheme,
-            darkTheme: AppDarkTheme.darkTheme,
-            themeMode: state.themeMode,
-            home: const HomePage(),
-            onGenerateRoute: (settings) {
-              if (settings.name == '/job-details') {
-                final jobId = settings.arguments as String;
+    return RepositoryProvider(
+      create: (context) => JobRepository(
+        JobRemoteDataSource(http.Client()),
+      ),
+      child: BlocProvider(
+        create: (context) => ThemeCubit()..loadTheme(),
+        child: BlocConsumer<ThemeCubit, ThemeState>(
+          listener: (context, state) => {},
+          builder: (context, state) {
+            return MaterialApp(
+              title: 'Job Board Flutter',
+              debugShowCheckedModeBanner: false,
+              theme: AppLightTheme.lightTheme,
+              darkTheme: AppDarkTheme.darkTheme,
+              themeMode: state.themeMode,
+              home: const HomePage(),
+              onGenerateRoute: (settings) {
+                if (settings.name == '/job-details') {
+                  final jobId = settings.arguments as String;
 
-                return MaterialPageRoute(
-                  builder: (context) => BlocProvider(
-                    create: (context) {
-                      final httpClient = http.Client();
-                      final jobRemoteDataSource = JobRemoteDataSource(httpClient);
-                      final jobRepository = JobRepository(jobRemoteDataSource);
-                      return JobDetailsCubit(repository: jobRepository)
-                        ..loadJobDetails(jobId);
-                    },
-                    child: const JobDetailsPage(),
-                  ),
-                );
-              }
-              return null;
-            },
-          );
-        },
+                  return MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (context) => JobDetailsCubit(
+                        repository: RepositoryProvider.of<JobRepository>(context),
+                      )..loadJobDetails(jobId),
+                      child: const JobDetailsPage(),
+                    ),
+                  );
+                }
+                return null;
+              },
+            );
+          },
+        ),
       ),
     );
   }
+
 }
 
 class HomePage extends StatelessWidget {
