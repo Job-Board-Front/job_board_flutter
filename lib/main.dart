@@ -4,12 +4,13 @@ import 'package:job_board_flutter/core/bloc/cubit/theme_cubit.dart';
 import 'package:job_board_flutter/core/widgets/app_drawer.dart';
 import 'package:job_board_flutter/core/widgets/app_navbar.dart';
 import 'package:job_board_flutter/features/jobs/bloc/job_details_cubit.dart';
+import 'package:job_board_flutter/features/jobs/data/datasources/job_remote_datasource.dart';
 import 'package:job_board_flutter/features/jobs/data/repositories/job_repository.dart';
 import 'package:job_board_flutter/features/jobs/pages/job_details_page.dart';
 import 'package:job_board_flutter/utils/theme/dark_theme.dart';
 import 'package:job_board_flutter/utils/theme/light_theme.dart';
 import 'package:http/http.dart' as http;
-import 'package:job_board_flutter/features/jobs/data/datasources/job_remote_datasource.dart';
+import 'features/jobs/pages/jobs_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -170,6 +171,15 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const JobsPage()),
+                );
+              },
+              child: const Text('Open Jobs Page'),
             ),
 
           ],
