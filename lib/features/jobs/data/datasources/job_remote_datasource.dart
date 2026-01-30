@@ -75,4 +75,21 @@ class JobRemoteDataSource {
       throw Exception('Failed to delete job');
     }
   }
+  Future<PaginatedResponse<Job>> getJobsPaginated({
+    JobSearchFilters? filters,
+  }) async {
+    final queryParams = filters?.toQueryParams() ?? {};
+    final uri = Uri.parse('${ApiConstants.baseUrl}/jobs')
+        .replace(queryParameters: queryParams);
+
+    final response = await client.get(uri);
+
+    if (response.statusCode == 200) {
+      final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+      return PaginatedResponse<Job>.fromJson(decoded, (json) => Job.fromJson(json));
+    } else {
+      throw Exception('Failed to fetch paginated jobs');
+    }
+  }
+
 }

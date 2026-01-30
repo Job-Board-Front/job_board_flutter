@@ -1,33 +1,34 @@
 import 'package:job_board_flutter/features/jobs/data/models/job_model.dart';
 
 class JobsState {
+  final List<Job> jobs;
   final bool isLoading;
   final String? error;
-  final List<Job> jobs;
+  final String? nextCursor;
   final bool hasMore;
-  final Map<String, dynamic>? filters;
 
   JobsState({
+    this.jobs = const [],
     this.isLoading = false,
     this.error,
-    this.jobs = const [],
+    this.nextCursor,
     this.hasMore = true,
-    this.filters,
   });
 
   JobsState copyWith({
+    List<Job>? jobs,
     bool? isLoading,
     String? error,
-    List<Job>? jobs,
+    String? nextCursor,
     bool? hasMore,
-    Map<String, dynamic>? filters,
   }) {
     return JobsState(
-      isLoading: isLoading ?? this.isLoading,
-      error: error ?? this.error,
       jobs: jobs ?? this.jobs,
+      isLoading: isLoading ?? this.isLoading,
+      error: error,
+      nextCursor: nextCursor ?? this.nextCursor,
       hasMore: hasMore ?? this.hasMore,
-      filters: filters ?? this.filters,
     );
   }
 }
+

@@ -9,41 +9,70 @@ import '../widgets/job_list.dart';
 import '../widgets/job_search.dart';
 import '../widgets/category_filter.dart';
 
-class JobsPage extends StatelessWidget {
+class JobsPage extends StatefulWidget {
   const JobsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Initialise le repository + datasource ici
-    final repository = JobRepository(JobRemoteDataSource(http.Client()));
+  State<JobsPage> createState() => _JobsPageState();
+}
 
-    return BlocProvider(
-      create: (_) => JobsCubit(repository: repository)..loadJobs(),
+class _JobsPageState extends State<JobsPage> {
+  late final JobsCubit cubit;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialise le repository + datasource
+    final repository = JobRepository(JobRemoteDataSource(http.Client()));
+    cubit = JobsCubit(repository: repository);
+
+    cubit.loadJobs(); // charge la première page
+
+    // Scroll listener pour la pagination
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200 &&
+          cubit.state.hasMore &&
+          !cubit.state.isLoading) {
+        cubit.loadMoreJobs();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider.value(
+      value: cubit,
       child: Scaffold(
         appBar: AppBar(title: const Text('All Jobs')),
         body: SafeArea(
           child: BlocBuilder<JobsCubit, JobsState>(
             builder: (context, state) {
-              // Loader
-              if (state.isLoading) {
+              if (state.isLoading && state.jobs.isEmpty) {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              // Erreur
-              if (state.error != null) {
+              if (state.error != null && state.jobs.isEmpty) {
                 return Center(child: Text('Error: ${state.error}'));
               }
 
-              // Liste de jobs
               final jobs = state.jobs;
               final jobCount = jobs.length;
 
               return SingleChildScrollView(
+                controller: _scrollController,
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Header
                     const Text(
                       'All Job Offers',
                       style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
@@ -54,22 +83,12 @@ class JobsPage extends StatelessWidget {
                       style: TextStyle(color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 24),
-
-                    // Search
-                    JobSearch(
-
-                    ),
+                    const JobSearch(),
+                    const SizedBox(height: 16),
+                    const CategoryFilter(),
 
                     const SizedBox(height: 16),
 
-                    // Filters
-                    CategoryFilter(
-
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // Counter
                     Text(
                       'Showing $jobCount jobs',
                       style: const TextStyle(fontWeight: FontWeight.w500),
@@ -78,6 +97,13 @@ class JobsPage extends StatelessWidget {
 
                     // Job list
                     JobList(jobs: jobs),
+
+                    // Loader de fin pour pagination
+                    if (state.isLoading)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
                   ],
                 ),
               );

@@ -25,4 +25,10 @@ class JobRepository {
   Future<void> deleteJob(String id) {
     return remote.deleteJob(id);
   }
+
+  Future<PaginatedResponse<Job>> getJobsPaginated({
+    JobSearchFilters? filters,
+  }) {
+    return remote.getJobsPaginated(filters: filters);
+  }
 }
