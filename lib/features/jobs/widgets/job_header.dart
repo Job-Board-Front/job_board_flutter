@@ -56,9 +56,19 @@ class JobHeader extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 16),
-        const SizedBox(width: 4),
-        Text(text),
+        Icon(
+          icon,
+          size: 18,
+          color: Colors.grey[600],
+        ),
+        const SizedBox(width: 6),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey[700],
+          ),
+        ),
       ],
     );
   }

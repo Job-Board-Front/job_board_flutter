@@ -12,7 +12,7 @@ enum ExperienceLevel {
 }
 
 class Job {
-  final String? id;
+  final String id;
   final String title;
   final String description;
   final String company;
@@ -31,7 +31,7 @@ class Job {
   final String? submissionLink;
 
   Job({
-    this.id,
+    required this.id,
     required this.title,
     required this.description,
     required this.company,
