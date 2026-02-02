@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:job_board_flutter/features/jobs/data/models/job_model.dart';
-
+import '../../../core/utils/url_utils.dart';
 class JobHeader extends StatelessWidget {
   final Job job;
   const JobHeader({super.key, required this.job});
@@ -10,9 +10,18 @@ class JobHeader extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CircleAvatar(
-          radius: 24,
-          child: Text(job.company[0]),
+        // Logo or initials
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: job.logoUrl != null
+              ? Image.network(
+            absoluteUrl(job.logoUrl!)!,
+            width: 48,
+            height: 48,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => _buildInitials(),
+          )
+              : _buildInitials(),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -28,7 +37,8 @@ class JobHeader extends StatelessWidget {
                 spacing: 12,
                 children: [
                   _iconText(Icons.location_on, job.location),
-                  _iconText(Icons.work, _formatEmploymentType(job.employmentType)),
+                  _iconText(
+                      Icons.work, _formatEmploymentType(job.employmentType)),
                   _iconText(Icons.attach_money, job.salaryRange ?? 'N/A'),
                 ],
               ),
@@ -36,6 +46,30 @@ class JobHeader extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+
+  // Builds initials fallback
+  Widget _buildInitials() {
+    final initials = job.company
+        .split(' ')
+        .map((e) => e.isNotEmpty ? e[0] : '')
+        .take(2)
+        .join()
+        .toUpperCase();
+    return Container(
+      width: 48,
+      height: 48,
+      color: Colors.grey[300],
+      alignment: Alignment.center,
+      child: Text(
+        initials,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: Color(0xFF94A3B8),
+        ),
+      ),
     );
   }
 

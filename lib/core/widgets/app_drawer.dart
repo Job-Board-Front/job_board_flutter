@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -68,7 +67,6 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
 
-
           // Menu principal
           Expanded(
             child: ListView(
@@ -81,8 +79,7 @@ class AppDrawer extends StatelessWidget {
                   ),
                   title: const Text('Home'),
                   onTap: () {
-                    Navigator.pop(context);
-                    // TODO: Naviguer vers Home
+                    Navigator.pop(context); // just closes drawer
                   },
                 ),
                 ListTile(
@@ -92,8 +89,7 @@ class AppDrawer extends StatelessWidget {
                   ),
                   title: const Text('Jobs'),
                   onTap: () {
-                    Navigator.pop(context);
-                    // TODO: Naviguer vers Jobs
+                    Navigator.pop(context); // just closes drawer
                   },
                 ),
                 ListTile(
@@ -103,8 +99,7 @@ class AppDrawer extends StatelessWidget {
                   ),
                   title: const Text('Bookmarked'),
                   onTap: () {
-                    Navigator.pop(context);
-                    // TODO: Naviguer vers Bookmarked
+                    Navigator.pop(context); // just closes drawer
                   },
                 ),
               ],
@@ -121,8 +116,7 @@ class AppDrawer extends StatelessWidget {
                   width: double.infinity,
                   child: OutlinedButton.icon(
                     onPressed: () {
-                      Navigator.pop(context);
-                      // TODO: Naviguer vers Login
+                      Navigator.pop(context); // just closes drawer
                     },
                     icon: const Icon(Icons.login_rounded),
                     label: const Text('Login'),
@@ -139,8 +133,7 @@ class AppDrawer extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () {
-                      Navigator.pop(context);
-                      // TODO: Naviguer vers Sign Up
+                      Navigator.pop(context); // just closes drawer
                     },
                     icon: const Icon(Icons.person_add_rounded),
                     label: const Text('Sign Up'),
