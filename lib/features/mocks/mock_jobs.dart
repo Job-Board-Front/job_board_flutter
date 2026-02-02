@@ -1,0 +1,36 @@
+import '../jobs/data/models/job_model.dart';
+
+final List<Job> mockJobs = [
+  Job(
+    id: '1',
+    title: 'Flutter Developer',
+    description: 'Build and maintain cross-platform mobile apps using Flutter.',
+    company: 'TechCorp',
+    location: 'Remote',
+    employmentType: EmploymentType.fullTime,
+    experienceLevel: ExperienceLevel.mid,
+    salaryRange: '€45k - €60k',
+    techStack: ['Flutter', 'Dart', 'Firebase'],
+    keywords: ['mobile', 'flutter'],
+    source: 'LinkedIn',
+    isActive: true,
+    expiresAt: DateTime.now().add(const Duration(days: 30)),
+    logoUrl: null,
+  ),
+  Job(
+    id: '2',
+    title: 'Backend Engineer',
+    description: 'Design APIs and scalable backend services.',
+    company: 'StartupX',
+    location: 'Paris',
+    employmentType: EmploymentType.contract,
+    experienceLevel: ExperienceLevel.senior,
+    salaryRange: '€500/day',
+    techStack: ['Node.js', 'PostgreSQL'],
+    keywords: ['backend', 'api'],
+    source: 'Indeed',
+    isActive: false,
+    expiresAt: DateTime.now().add(const Duration(days: 10)),
+    logoUrl: null,
+  ),
+];
