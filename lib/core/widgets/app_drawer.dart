@@ -107,7 +107,11 @@ class AppDrawer extends StatelessWidget {
           ),
 
           // Section Login/Sign Up en bas
-          const Divider(height: 1),
+          Divider(
+            height: 1,
+            color: isDark ? Colors.white : Colors.grey[300],
+          ),
+
           Container(
             padding: const EdgeInsets.all(16),
             child: Column(
