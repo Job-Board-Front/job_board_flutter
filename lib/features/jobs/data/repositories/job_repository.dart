@@ -63,4 +63,10 @@ class JobRepository {
   }
 
 
+
+  Future<PaginatedResponse<Job>> getJobsPaginated({
+    JobSearchFilters? filters,
+  }) {
+    return remote.getJobsPaginated(filters: filters);
+  }
 }

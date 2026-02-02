@@ -7,21 +7,57 @@ class JobHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Logo or initials
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
+        Container(
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color(0xFFE2E8F0)),
+
+          ),
           child: job.logoUrl != null
-              ? Image.network(
-            absoluteUrl(job.logoUrl!)!,
-            width: 48,
-            height: 48,
-            fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => _buildInitials(),
+              ? ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.network(
+              absoluteUrl(job.logoUrl!)!,
+              fit: BoxFit.cover,
+
+              errorBuilder: (_, __, ___) => Center(
+                child: Text(
+                  job.company
+                      .split(' ')
+                      .map((e) => e[0])
+                      .take(2)
+                      .join(),
+                  style: const TextStyle( fontWeight: FontWeight.bold,
+                    fontSize: 18, color: Color(0xFF94A3B8),
+                  ),
+                ),
+              ),
+            ),
           )
-              : _buildInitials(),
+              : Center(
+            child: Text(
+              job.company
+                  .split(' ')
+                  .map((e) => e[0])
+                  .take(2)
+                  .join(),
+              style:  TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: isDark ? const Color(0xFF94A3B8) : Colors.black87,
+
+              ),
+            ),
+          ),
         ),
         const SizedBox(width: 12),
         Expanded(

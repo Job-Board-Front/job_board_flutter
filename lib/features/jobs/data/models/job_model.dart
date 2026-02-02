@@ -100,6 +100,70 @@ class Job {
         return ExperienceLevel.mid;
     }
   }
-
-
 }
+
+class PaginatedResponse<T> {
+  final List<T> data;
+  final String? nextCursor;
+
+  PaginatedResponse({
+    required this.data,
+    required this.nextCursor,
+  });
+
+  factory PaginatedResponse.fromJson(
+      Map<String, dynamic> json, T Function(Map<String, dynamic>) fromJsonT) {
+    final items = (json['data'] as List)
+        .map((e) => fromJsonT(e as Map<String, dynamic>))
+        .toList();
+
+    return PaginatedResponse(
+      data: items,
+      nextCursor: json['nextCursor'],
+    );
+  }
+}
+class JobSearchFilters {
+  final String? search;
+  final String? location;
+  final EmploymentType? employmentType;
+  final ExperienceLevel? experienceLevel;
+  final int? limit;
+  final String? cursor;
+
+  JobSearchFilters({
+    this.search,
+    this.location,
+    this.employmentType,
+    this.experienceLevel,
+    this.limit,
+    this.cursor,
+  });
+
+  Map<String, String> toQueryParams() {
+    final Map<String, String> params = {};
+
+    if (search != null && search!.isNotEmpty) {
+      params['search'] = search!;
+    }
+    if (location != null && location!.isNotEmpty) {
+      params['location'] = location!;
+    }
+    if (employmentType != null) {
+      params['employmentType'] = employmentType.toString().split('.').last;
+    }
+    if (experienceLevel != null) {
+      params['experienceLevel'] = experienceLevel.toString().split('.').last;
+    }
+    if (limit != null) {
+      params['limit'] = limit.toString();
+    }
+    if (cursor != null) {
+      params['cursor'] = cursor!;
+    }
+
+    return params;
+  }
+}
+
+
