@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:job_board_flutter/core/bloc/cubit/theme_cubit.dart';
 import 'package:job_board_flutter/core/widgets/app_drawer.dart';
 import 'package:job_board_flutter/core/widgets/app_navbar.dart';
-import 'package:job_board_flutter/features/jobs/bloc/job_details_cubit.dart';
+import 'package:job_board_flutter/features/jobs/bloc/job-details/job_details_cubit.dart';
 import 'package:job_board_flutter/features/jobs/data/datasources/job_remote_datasource.dart';
 import 'package:job_board_flutter/features/jobs/data/repositories/job_repository.dart';
 import 'package:job_board_flutter/features/jobs/pages/job_details_page.dart';
@@ -23,9 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
-      create: (context) => JobRepository(
-        JobRemoteDataSource(http.Client()),
-      ),
+      create: (context) => JobRepository(JobRemoteDataSource(http.Client())),
       child: BlocProvider(
         create: (context) => ThemeCubit()..loadTheme(),
         child: BlocConsumer<ThemeCubit, ThemeState>(
@@ -45,7 +43,9 @@ class MyApp extends StatelessWidget {
                   return MaterialPageRoute(
                     builder: (context) => BlocProvider(
                       create: (context) => JobDetailsCubit(
-                        repository: RepositoryProvider.of<JobRepository>(context),
+                        repository: RepositoryProvider.of<JobRepository>(
+                          context,
+                        ),
                       )..loadJobDetails(jobId),
                       child: const JobDetailsPage(),
                     ),
@@ -60,5 +60,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

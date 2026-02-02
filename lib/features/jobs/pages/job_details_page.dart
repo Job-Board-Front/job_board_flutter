@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:job_board_flutter/core/widgets/app_drawer.dart';
 import 'package:job_board_flutter/core/widgets/app_navbar.dart';
-import 'package:job_board_flutter/features/jobs/bloc/job_details_cubit.dart';
-import 'package:job_board_flutter/features/jobs/bloc/job_details_state.dart';
+import 'package:job_board_flutter/features/jobs/bloc/job-details/job_details_cubit.dart';
+import 'package:job_board_flutter/features/jobs/bloc/job-details/job_details_state.dart';
 import 'package:job_board_flutter/features/jobs/data/models/job_model.dart';
 import 'package:job_board_flutter/features/jobs/data/repositories/job_repository.dart';
 import 'package:job_board_flutter/features/jobs/widgets/back_to_jobs.dart';
@@ -61,7 +61,8 @@ class JobDetailsPage extends StatelessWidget {
                     FutureBuilder<List<Job>>(
                       future: jobRepository.getSimilarJobs(job.id),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return const Padding(
                             padding: EdgeInsets.all(16),
                             child: CircularProgressIndicator(),
@@ -103,13 +104,11 @@ class JobDetailsPage extends StatelessWidget {
                     print('Bookmark tapped for ${job.title}');
                   },
                 ),
-
               ),
             ],
           );
         },
       ),
     );
-
   }
 }

@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:job_board_flutter/features/jobs/data/models/job_model.dart';
 import '../../../core/widgets/app_drawer.dart';
 import '../../../core/widgets/app_navbar.dart';
-import '../bloc/jobs_cubit.dart';
-import '../bloc/jobs_state.dart';
+import '../bloc/jobs/jobs_cubit.dart';
+import '../bloc/jobs/jobs_state.dart';
 import '../data/datasources/job_remote_datasource.dart';
 import '../data/repositories/job_repository.dart';
 import '../widgets/home/hero_section.dart';
@@ -29,10 +29,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     final repository = JobRepository(JobRemoteDataSource(http.Client()));
     cubit = JobsCubit(repository: repository);
-    cubit.loadJobs(
-      filters: JobSearchFilters(limit: 3),
-    );
-
+    cubit.loadJobs(filters: JobSearchFilters(limit: 3));
   }
 
   @override
@@ -70,9 +67,7 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Text(
                               'Recent Job Offers',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
+                              style: Theme.of(context).textTheme.titleLarge
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 4),
@@ -87,10 +82,14 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => const JobsPage()),
+                                builder: (_) => const JobsPage(),
+                              ),
                             );
                           },
-                          icon: const Icon(Icons.arrow_forward, color: Colors.blue),
+                          icon: const Icon(
+                            Icons.arrow_forward,
+                            color: Colors.blue,
+                          ),
                           label: const Text(
                             'View All',
                             style: TextStyle(color: Colors.blue),
@@ -103,11 +102,12 @@ class _HomePageState extends State<HomePage> {
                       children: jobs
                           .map(
                             (job) => Padding(
-                          padding:
-                          const EdgeInsets.symmetric(vertical: 8.0),
-                          child: JobCard(job: job),
-                        ),
-                      )
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8.0,
+                              ),
+                              child: JobCard(job: job),
+                            ),
+                          )
                           .toList(),
                     ),
                   ],

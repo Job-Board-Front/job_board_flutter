@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import '../../../core/widgets/app_drawer.dart';
 import '../../../core/widgets/app_navbar.dart';
-import '../bloc/jobs_cubit.dart';
-import '../bloc/jobs_state.dart';
+import '../bloc/jobs/jobs_cubit.dart';
+import '../bloc/jobs/jobs_state.dart';
 import '../data/datasources/job_remote_datasource.dart';
 import '../data/repositories/job_repository.dart';
 import '../widgets/job_list.dart';
@@ -35,7 +35,7 @@ class _JobsPageState extends State<JobsPage> {
     // Scroll listener pour la pagination
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 200 &&
+              _scrollController.position.maxScrollExtent - 200 &&
           cubit.state.hasMore &&
           !cubit.state.isLoading) {
         cubit.loadMoreJobs();
@@ -78,7 +78,10 @@ class _JobsPageState extends State<JobsPage> {
                   children: [
                     const Text(
                       'All Job Offers',
-                      style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
