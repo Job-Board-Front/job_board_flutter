@@ -25,7 +25,7 @@ class JobDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppNavbar(),
       drawer: AppDrawer(),
-      bottomNavigationBar: const JobActionsBar(),
+
       body: BlocBuilder<JobDetailsCubit, JobDetailsState>(
         builder: (context, state) {
           if (state.isLoading) {
@@ -38,66 +38,78 @@ class JobDetailsPage extends StatelessWidget {
 
           final job = state.job!;
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: BackToJobsButton(),
-                ),
-                const SizedBox(height: 16),
-                JobHeader(job: job),
-                const SizedBox(height: 24),
-                JobDescription(description: job.description),
-                const SizedBox(height: 24),
-                JobSkills(skills: job.techStack),
-                const SizedBox(height: 24),
-                JobDetailsCard(job: job),
-                const SizedBox(height: 32),
+          return Stack(
+            children: [
+              SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
+                child: Column(
+                  children: [
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: BackToJobsButton(),
+                    ),
+                    const SizedBox(height: 16),
+                    JobHeader(job: job),
+                    const SizedBox(height: 24),
+                    JobDescription(description: job.description),
+                    const SizedBox(height: 24),
+                    JobSkills(skills: job.techStack),
+                    const SizedBox(height: 24),
+                    JobDetailsCard(job: job),
+                    const SizedBox(height: 24), // space for bottom bar
 
-                // Similar Jobs Section
-                FutureBuilder<List<Job>>(
-                  future: jobRepository.getSimilarJobs(job.id),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    }
+                    FutureBuilder<List<Job>>(
+                      future: jobRepository.getSimilarJobs(job.id),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Padding(
+                            padding: EdgeInsets.all(16),
+                            child: CircularProgressIndicator(),
+                          );
+                        }
 
-                    if (snapshot.hasError || !snapshot.hasData) {
-                      return const SizedBox.shrink();
-                    }
+                        if (!snapshot.hasData) {
+                          return const SizedBox.shrink();
+                        }
 
-                    return SimilarJobs(
-                      jobs: snapshot.data!,
-                      onJobTap: (selectedJob) {
-                        Navigator.pushNamed(
-                          context,
-                          '/job-details',
-                          arguments: selectedJob.id,
+                        return SimilarJobs(
+                          jobs: snapshot.data!,
+                          onJobTap: (selectedJob) {
+                            Navigator.pushNamed(
+                              context,
+                              '/job-details',
+                              arguments: selectedJob.id,
+                            );
+                          },
+                          onBookmarkTap: (_) {},
+                          bookmarkedJobIds: const {},
+                          onMoreTap: () {},
                         );
                       },
-                      onBookmarkTap: (selectedJob) {
-                        // TODO: Implémenter la logique de bookmark
-                        print('Bookmark tapped for ${selectedJob.title}');
-                      },
-                      bookmarkedJobIds: const {},
-                      onMoreTap: () {
-                        print('More similar jobs tapped');
-                      },
-                    );
+                    ),
+                  ],
+                ),
+              ),
+
+              // ✅ Bottom Actions Bar
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: JobActionsBar(
+                  submissionLink: job.submissionLink,
+                  isBookmarked: false, // later from Bloc / state
+                  onBookmarkTap: () {
+                    print('Bookmark tapped for ${job.title}');
                   },
                 ),
-              ],
-            ),
+
+              ),
+            ],
           );
         },
       ),
     );
+
   }
 }

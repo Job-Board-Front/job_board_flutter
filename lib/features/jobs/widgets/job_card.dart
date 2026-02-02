@@ -57,6 +57,8 @@ class JobCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
 
     return GestureDetector(
       onTap: onTap,
@@ -80,7 +82,8 @@ class JobCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFF334155)),
+                      border: Border.all(color: const Color(0xFFE2E8F0)),
+
                     ),
                     child: job.logoUrl != null
                         ? ClipRRect(
@@ -96,10 +99,8 @@ class JobCard extends StatelessWidget {
                                 .map((e) => e[0])
                                 .take(2)
                                 .join(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Color(0xFF94A3B8),
+                            style: const TextStyle( fontWeight: FontWeight.bold,
+                              fontSize: 18, color: Color(0xFF94A3B8),
                             ),
                           ),
                         ),
@@ -112,10 +113,11 @@ class JobCard extends StatelessWidget {
                             .map((e) => e[0])
                             .take(2)
                             .join(),
-                        style: const TextStyle(
+                        style:  TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
-                          color: Color(0xFF94A3B8),
+                          color: isDark ? const Color(0xFF94A3B8) : Colors.black87,
+
                         ),
                       ),
                     ),
@@ -127,10 +129,11 @@ class JobCard extends StatelessWidget {
                       children: [
                         Text(
                           job.title,
-                          style: const TextStyle(
+                          style:  TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFFF1F5F9),
+                            color: isDark ? const Color(0xFFF1F5F9) : Colors.grey[800],
+
                             height: 1.3,
                           ),
                           maxLines: 2,
@@ -139,8 +142,8 @@ class JobCard extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                           job.company,
-                          style: const TextStyle(
-                            color: Color(0xFF94A3B8),
+                          style: TextStyle(
+                            color: isDark ? const Color(0xFF94A3B8) : Colors.black54,
                             fontSize: 14,
                           ),
                         ),
@@ -171,9 +174,9 @@ class JobCard extends StatelessWidget {
                 job.description,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style:  TextStyle(
                   fontSize: 13,
-                  color: Color(0xFFCBD5E1),
+                  color: isDark ? const Color(0xFFCBD5E1) : Colors.grey[600],
                   height: 1.5,
                 ),
               ),
@@ -238,9 +241,10 @@ class JobCard extends StatelessWidget {
                         Flexible(
                           child: Text(
                             job.location,
-                            style: const TextStyle(
+                            style:  TextStyle(
                               fontSize: 12,
-                              color: Color(0xFF94A3B8),
+                              color: isDark ? const Color(0xFF94A3B8) : Colors.black87,
+
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -295,10 +299,10 @@ class JobCard extends StatelessWidget {
                       ),
                       child: Text(
                         job.salaryRange!,
-                        style: const TextStyle(
+                        style:  TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF60A5FA),
+                          color: isDark ? const Color(0xFF60A5FA) : Colors.grey[800],
                         ),
                       ),
                     ),

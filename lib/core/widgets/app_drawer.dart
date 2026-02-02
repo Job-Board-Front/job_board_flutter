@@ -84,7 +84,12 @@ class AppDrawer extends StatelessWidget {
                   ),
                   title: const Text('Home'),
                   onTap: () {
-                    Navigator.pop(context, MaterialPageRoute(builder: (_) => const HomePage()),);
+                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => const HomePage()),
+                    );
+
                   },
                 ),
                 ListTile(
@@ -94,7 +99,12 @@ class AppDrawer extends StatelessWidget {
                   ),
                   title: const Text('Jobs'),
                   onTap: () {
-                    Navigator.pop(context, MaterialPageRoute( builder: (_) => const JobsPage()),);
+                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => const JobsPage()),
+                    );
+
                   },
                 ),
                 ListTile(
@@ -104,8 +114,7 @@ class AppDrawer extends StatelessWidget {
                   ),
                   title: const Text('Bookmarked'),
                   onTap: () {
-                    Navigator.pop(context);
-                    // TODO: Naviguer vers Bookmarked
+                    Navigator.pop(context); // just closes drawer
                   },
                 ),
               ],
@@ -113,7 +122,11 @@ class AppDrawer extends StatelessWidget {
           ),
 
           // Section Login/Sign Up en bas
-          const Divider(height: 1),
+          Divider(
+            height: 1,
+            color: isDark ? Colors.white : Colors.grey[300],
+          ),
+
           Container(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -122,8 +135,7 @@ class AppDrawer extends StatelessWidget {
                   width: double.infinity,
                   child: OutlinedButton.icon(
                     onPressed: () {
-                      Navigator.pop(context);
-                      // TODO: Naviguer vers Login
+                      Navigator.pop(context); // just closes drawer
                     },
                     icon: const Icon(Icons.login_rounded),
                     label: const Text('Login'),
@@ -140,8 +152,7 @@ class AppDrawer extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () {
-                      Navigator.pop(context);
-                      // TODO: Naviguer vers Sign Up
+                      Navigator.pop(context); // just closes drawer
                     },
                     icon: const Icon(Icons.person_add_rounded),
                     label: const Text('Sign Up'),

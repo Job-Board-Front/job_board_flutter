@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class JobActionsBar extends StatelessWidget {
-  const JobActionsBar({super.key});
+  final String? submissionLink;
+  final VoidCallback? onBookmarkTap;
+  final bool isBookmarked;
+
+  const JobActionsBar({
+    super.key,
+    required this.submissionLink,
+    this.onBookmarkTap,
+    this.isBookmarked = false,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final canApply = submissionLink != null && submissionLink!.isNotEmpty;
+
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
@@ -21,26 +33,39 @@ class JobActionsBar extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: Row(
             children: [
+              // Apply button
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: canApply
+                      ? () async {
+                    final uri = Uri.tryParse(submissionLink!);
+                    if (uri != null) {
+                      await launchUrl(
+                        uri,
+                        mode: LaunchMode.externalApplication,
+                      );
+                    }
+                  }
+                      : null,
                   style: ElevatedButton.styleFrom(
-                    elevation: 2,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'Apply Now',
-                    style: TextStyle(
+                  child: Text(
+                    canApply ? 'Apply Now' : 'Applications closed',
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
+
               const SizedBox(width: 16),
+
+              // Bookmark button
               Container(
                 decoration: BoxDecoration(
                   color: Colors.blueAccent.withOpacity(0.1),
@@ -51,14 +76,16 @@ class JobActionsBar extends StatelessWidget {
                   ),
                 ),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: onBookmarkTap,
                   icon: Icon(
-                    Icons.bookmark_border,
+                    isBookmarked
+                        ? Icons.bookmark
+                        : Icons.bookmark_border,
                     color: Colors.blueAccent,
                   ),
+                  tooltip: isBookmarked ? 'Remove bookmark' : 'Bookmark',
                   iconSize: 24,
                   padding: const EdgeInsets.all(12),
-                  tooltip: 'Bookmark',
                 ),
               ),
             ],
@@ -68,4 +95,3 @@ class JobActionsBar extends StatelessWidget {
     );
   }
 }
-// Job Actions Bar Widget
