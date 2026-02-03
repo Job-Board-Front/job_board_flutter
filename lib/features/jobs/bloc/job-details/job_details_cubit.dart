@@ -59,4 +59,17 @@ class JobDetailsCubit extends Cubit<JobDetailsState> {
         .take(3)
         .toList();
   }
+
+  Future<void> deleteJob(String jobId) async {
+    try {
+      emit(state.copyWith(isLoading: true, error: null));
+      await repository.deleteJob(jobId);
+      emit(state.copyWith(isLoading: false));
+    } catch (e) {
+      emit(state.copyWith(
+        error: 'Failed to delete job: ${e.toString()}',
+        isLoading: false,
+      ));
+    }
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:job_board_flutter/core/guards/role_guard.dart';
 import 'package:job_board_flutter/core/widgets/app_drawer.dart';
 import 'package:job_board_flutter/core/widgets/app_navbar.dart';
 import 'package:job_board_flutter/features/jobs/bloc/job-details/job_details_cubit.dart';
@@ -97,12 +98,89 @@ class JobDetailsPage extends StatelessWidget {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                child: JobActionsBar(
-                  job: job,
-                  isBookmarked: false, // later from Bloc / state
-                  onBookmarkTap: () {
-                    print('Bookmark tapped for ${job.title}');
-                  },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Admin actions (Edit/Delete)
+                    RoleGuard(
+                      allowedRoles: ['admin'],
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          border: Border(
+                            top: BorderSide(color: Colors.grey.shade300),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton.icon(
+                              onPressed: () {
+                                Navigator.of(context).pushNamed(
+                                  '/job-edit',
+                                  arguments: job.id,
+                                );
+                              },
+                              icon: const Icon(Icons.edit),
+                              label: const Text('Edit'),
+                            ),
+                            const SizedBox(width: 16),
+                            TextButton.icon(
+                              onPressed: () async {
+                                final confirmed = await showDialog<bool>(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('Delete Job'),
+                                    content: Text(
+                                      'Are you sure you want to delete "${job.title}"?',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(true),
+                                        style: TextButton.styleFrom(
+                                          foregroundColor: Colors.red,
+                                        ),
+                                        child: const Text('Delete'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+
+                                if (confirmed == true) {
+                                  final cubit =
+                                      context.read<JobDetailsCubit>();
+                                  await cubit.deleteJob(job.id);
+                                  if (context.mounted) {
+                                    Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                      '/',
+                                      (route) => false,
+                                    );
+                                  }
+                                }
+                              },
+                              icon: const Icon(Icons.delete),
+                              label: const Text('Delete'),
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.red,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    JobActionsBar(job: job),
+                  ],
                 ),
               ),
             ],
