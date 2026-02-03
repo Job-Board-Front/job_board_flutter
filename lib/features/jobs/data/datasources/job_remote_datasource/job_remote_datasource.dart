@@ -30,7 +30,7 @@ abstract class JobRemoteDataSource {
   Future<List<Job>> getJobsByIds(@Query('ids') String ids);
 
   @POST('/jobs')
-  Future<Job> createJob(@Body() Job job);
+  Future<dynamic> createJob(@Body() Map<String, dynamic> createJobDto);
 
   @DELETE('/jobs/{id}')
   Future<void> deleteJob(@Path('id') String id);
@@ -47,4 +47,14 @@ abstract class JobRemoteDataSource {
 
   @GET("/filters")
   Future<JobFiltersModel> getFilters();
+
+  @PUT('/jobs/{id}')
+  Future<dynamic> updateJob(@Path('id') String id, @Body() Map<String, dynamic> updateJobDto);
+
+  @POST('/jobs/{id}/logo')
+  @MultiPart()
+  Future<dynamic> uploadLogo(
+    @Path('id') String jobId,
+    @Part() MultipartFile logo,
+  );
 }
