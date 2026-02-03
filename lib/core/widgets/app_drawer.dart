@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:job_board_flutter/core/constants/app_colors.dart';
 import 'package:job_board_flutter/features/jobs/pages/home_page.dart';
 import 'package:job_board_flutter/features/jobs/pages/jobs_page.dart';
 
@@ -25,7 +26,7 @@ class AppDrawer extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.fromLTRB(16, 50, 16, 16),
                 decoration: BoxDecoration(
-                  color: isDark ? Colors.grey[900] : Colors.white,
+                  color: isDark ? AppColors.slate900 : Colors.white,
                   border: Border(
                     bottom: BorderSide(
                       color: isDark ? Colors.grey[700]! : Colors.grey[300]!,
