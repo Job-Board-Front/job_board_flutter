@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:job_board_flutter/core/bloc/cubit/theme_cubit.dart';
 import 'package:job_board_flutter/features/auth/bloc/auth_cubit.dart';
 import 'package:job_board_flutter/features/auth/services/auth_service.dart';
-import 'package:job_board_flutter/features/jobs/bloc/job_details_cubit.dart';
+import 'package:job_board_flutter/features/jobs/bloc/job-details/job_details_cubit.dart';
 import 'package:job_board_flutter/features/jobs/data/datasources/job_remote_datasource.dart';
 import 'package:job_board_flutter/features/jobs/data/repositories/job_repository.dart';
 import 'package:job_board_flutter/features/jobs/pages/home_page.dart';
