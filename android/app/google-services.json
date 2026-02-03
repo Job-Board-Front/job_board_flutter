@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "958423443778",
+    "firebase_url": "https://job-board-322da-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "job-board-322da",
+    "storage_bucket": "job-board-322da.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958423443778:android:830bd3e96203ed7778c0db",
+        "android_client_info": {
+          "package_name": "com.example.job_board_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "958423443778-506bvuvrmj8duhp0efhnve8b3b9jait6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeSnyOAh4stoJ0MbT--revM5Mm6_lJ7_o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "958423443778-506bvuvrmj8duhp0efhnve8b3b9jait6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
