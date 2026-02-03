@@ -6,6 +6,9 @@ class AppColors {
   // --- Primary Brand Colors (Tech Blue) ---
   static const Color primary50 = Color(0xFFEFF6FF);
   static const Color primary100 = Color(0xFFDBEAFE);
+  static const Color primary400 = Color(
+    0xFF60A5FA,
+  ); // ← added (Tailwind blue-400)
   static const Color primary500 = Color(0xFF3B82F6);
   static const Color primary600 = Color(0xFF2563EB); // Main Brand Color
   static const Color primary700 = Color(0xFF1D4ED8);
@@ -18,10 +21,18 @@ class AppColors {
   static const Color slate300 = Color(0xFFCBD5E1);
   static const Color slate400 = Color(0xFF94A3B8); // Subtitles
   static const Color slate500 = Color(0xFF64748B); // Icons
+  static const Color slate600 = Color(
+    0xFF475569,
+  ); // ← added (Tailwind slate-600)
   static const Color slate700 = Color(0xFF334155);
   static const Color slate800 = Color(0xFF1E293B); // Dark Card bg
   static const Color slate850 = Color(0xFF1A202C); // Darker Card bg
-  static const Color slate900 = Color(0xFF0F172A); // Dark Scaffold bg
+  static const Color slate900 = Color.fromARGB(
+    255,
+    21,
+    28,
+    43,
+  ); // Dark Scaffold bg
 
   // --- Semantic Colors ---
   static const Color error = Color(0xFFEF4444);

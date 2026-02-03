@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import '../../../core/widgets/app_drawer.dart';
 import '../../../core/widgets/app_navbar.dart';
 import '../bloc/jobs/jobs_cubit.dart';
 import '../bloc/jobs/jobs_state.dart';
-import '../data/datasources/job_remote_datasource.dart';
 import '../data/repositories/job_repository.dart';
 import '../widgets/job_list.dart';
 import '../widgets/job_search.dart';
@@ -27,7 +25,7 @@ class _JobsPageState extends State<JobsPage> {
     super.initState();
 
     // Initialise le repository + datasource
-    final repository = JobRepository(JobRemoteDataSource(http.Client()));
+    final repository = JobRepository();
     cubit = JobsCubit(repository: repository);
 
     cubit.loadJobs(); // charge la première page
@@ -89,9 +87,20 @@ class _JobsPageState extends State<JobsPage> {
                       style: TextStyle(color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 24),
-                    const JobSearch(),
+                    JobSearch(
+                      search: state.activeFilters.search,
+                      onFilterChanged: (key, value) {
+                        cubit.updateFilter(key, value);
+                      },
+                    ),
                     const SizedBox(height: 16),
-                    const CategoryFilter(),
+                    CategoryFilter(
+                      filtersData: state.filtersData,
+                      activeFilters: state.activeFilters,
+                      onFilterChanged: (key, value) {
+                        cubit.updateFilter(key, value);
+                      },
+                    ),
 
                     const SizedBox(height: 16),
 
