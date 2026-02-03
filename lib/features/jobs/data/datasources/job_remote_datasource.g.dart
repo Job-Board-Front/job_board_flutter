@@ -171,8 +171,8 @@ class _JobRemoteDataSource implements JobRemoteDataSource {
   Future<PaginatedResponse<Job>> getJobsPaginated({
     String? search,
     String? location,
-    EmploymentType? employmentType,
-    ExperienceLevel? experienceLevel,
+    String? employmentType,
+    String? experienceLevel,
     int? limit,
     String? cursor,
   }) async {
@@ -205,6 +205,33 @@ class _JobRemoteDataSource implements JobRemoteDataSource {
         _result.data!,
         (json) => Job.fromJson(json as Map<String, dynamic>),
       );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<JobFiltersModel> getFilters() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<JobFiltersModel>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/filters',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late JobFiltersModel _value;
+    try {
+      _value = JobFiltersModel.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

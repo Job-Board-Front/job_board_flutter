@@ -1,3 +1,4 @@
+import 'package:job_board_flutter/features/jobs/data/models/job_filters_model.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 import '../../../../core/constants/api_constants.dart';
@@ -36,9 +37,12 @@ abstract class JobRemoteDataSource {
   Future<PaginatedResponse<Job>> getJobsPaginated({
     @Query('search') String? search,
     @Query('location') String? location,
-    @Query('employmentType') EmploymentType? employmentType,
-    @Query('experienceLevel') ExperienceLevel? experienceLevel,
+    @Query('employmentType') String? employmentType,
+    @Query('experienceLevel') String? experienceLevel,
     @Query('limit') int? limit,
     @Query('cursor') String? cursor,
   });
+
+  @GET("/filters")
+  Future<JobFiltersModel> getFilters();
 }

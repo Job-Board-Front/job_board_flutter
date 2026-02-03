@@ -1,15 +1,6 @@
-enum EmploymentType {
-  fullTime,
-  partTime,
-  contract,
-  internship,
-}
+enum EmploymentType { fullTime, partTime, contract, internship }
 
-enum ExperienceLevel {
-  junior,
-  mid,
-  senior,
-}
+enum ExperienceLevel { junior, mid, senior }
 
 class Job {
   final String id;
@@ -57,22 +48,26 @@ class Job {
       description: json['description'],
       company: json['company'],
       location: json['location'],
-      employmentType: _parseEmploymentType(json['employmentType']),
-      experienceLevel: _parseExperienceLevel(json['experienceLevel']),
+      employmentType: parseEmploymentType(json['employmentType']),
+      experienceLevel: parseExperienceLevel(json['experienceLevel']),
       salaryRange: json['salaryRange'],
       techStack: List<String>.from(json['techStack'] ?? []),
       keywords: List<String>.from(json['keywords'] ?? []),
       source: json['source'],
       isActive: json['isActive'] ?? true,
       expiresAt: DateTime.parse(json['expiresAt']),
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
+          : null,
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'])
+          : null,
       logoUrl: json['logoUrl'],
       submissionLink: json['submissionLink'],
     );
   }
 
-  static EmploymentType _parseEmploymentType(String type) {
+  static EmploymentType parseEmploymentType(String type) {
     switch (type.toLowerCase()) {
       case 'full-time':
       case 'fulltime':
@@ -80,7 +75,8 @@ class Job {
       case 'part-time':
       case 'parttime':
         return EmploymentType.partTime;
-      case 'contract':return EmploymentType.contract;
+      case 'contract':
+        return EmploymentType.contract;
       case 'internship':
         return EmploymentType.internship;
       default:
@@ -88,7 +84,7 @@ class Job {
     }
   }
 
-  static ExperienceLevel _parseExperienceLevel(String level) {
+  static ExperienceLevel parseExperienceLevel(String level) {
     switch (level.toLowerCase()) {
       case 'junior':
         return ExperienceLevel.junior;
@@ -106,29 +102,26 @@ class PaginatedResponse<T> {
   final List<T> data;
   final String? nextCursor;
 
-  PaginatedResponse({
-    required this.data,
-    required this.nextCursor,
-  });
+  PaginatedResponse({required this.data, required this.nextCursor});
 
   factory PaginatedResponse.fromJson(
-      Map<String, dynamic> json, T Function(Map<String, dynamic>) fromJsonT) {
+    Map<String, dynamic> json,
+    T Function(Map<String, dynamic>) fromJsonT,
+  ) {
     final items = (json['data'] as List)
         .map((e) => fromJsonT(e as Map<String, dynamic>))
         .toList();
 
-    return PaginatedResponse(
-      data: items,
-      nextCursor: json['nextCursor'],
-    );
+    return PaginatedResponse(data: items, nextCursor: json['nextCursor']);
   }
 }
+
 class JobSearchFilters {
   final String? search;
   final String? location;
   final EmploymentType? employmentType;
   final ExperienceLevel? experienceLevel;
-  final int? limit;
+  final int limit;
   final String? cursor;
 
   JobSearchFilters({
@@ -136,7 +129,7 @@ class JobSearchFilters {
     this.location,
     this.employmentType,
     this.experienceLevel,
-    this.limit,
+    this.limit = 10,
     this.cursor,
   });
 
@@ -165,5 +158,3 @@ class JobSearchFilters {
     return params;
   }
 }
-
-

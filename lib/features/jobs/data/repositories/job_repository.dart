@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:job_board_flutter/features/jobs/data/models/job_filters_model.dart';
 
 import '../datasources/job_remote_datasource.dart';
 import '../datasources/job_remote_datasource_provider.dart';
@@ -107,11 +108,20 @@ class JobRepository {
       return await _remoteDataSource.getJobsPaginated(
         search: filters.search,
         location: filters.location,
-        employmentType: filters.employmentType,
-        experienceLevel: filters.experienceLevel,
+        employmentType: _getEmploymentType(filters.employmentType),
+        experienceLevel: filters.experienceLevel?.name,
         limit: filters.limit,
         cursor: filters.cursor,
       );
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
+  Future<JobFiltersModel> getFilters() async {
+    try {
+      final filtersData = await _remoteDataSource.getFilters();
+      return filtersData;
     } on DioException catch (e) {
       throw _handleDioException(e);
     }
@@ -149,6 +159,21 @@ class JobRepository {
         return Exception('SSL certificate error.');
       default:
         return Exception(exception);
+    }
+  }
+
+  String _getEmploymentType(EmploymentType? employmentType) {
+    switch (employmentType) {
+      case EmploymentType.fullTime:
+        return 'full-time';
+      case EmploymentType.partTime:
+        return 'part-time';
+      case EmploymentType.contract:
+        return 'contract';
+      case EmploymentType.internship:
+        return 'internship';
+      default:
+        return 'full-time';
     }
   }
 }

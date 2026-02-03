@@ -87,9 +87,20 @@ class _JobsPageState extends State<JobsPage> {
                       style: TextStyle(color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 24),
-                    const JobSearch(),
+                    JobSearch(
+                      search: state.activeFilters.search,
+                      onFilterChanged: (key, value) {
+                        cubit.updateFilter(key, value);
+                      },
+                    ),
                     const SizedBox(height: 16),
-                    const CategoryFilter(),
+                    CategoryFilter(
+                      filtersData: state.filtersData,
+                      activeFilters: state.activeFilters,
+                      onFilterChanged: (key, value) {
+                        cubit.updateFilter(key, value);
+                      },
+                    ),
 
                     const SizedBox(height: 16),
 

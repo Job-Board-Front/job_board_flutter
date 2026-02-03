@@ -12,7 +12,6 @@ class JobDescription extends StatefulWidget {
 class _JobDescriptionState extends State<JobDescription> {
   bool _isExpanded = false;
 
-
   @override
   Widget build(BuildContext context) {
     final maxLength = 300;
@@ -27,9 +26,7 @@ class _JobDescriptionState extends State<JobDescription> {
       child: Card(
         elevation: 2,
         shadowColor: Colors.black.withOpacity(0.08),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -60,7 +57,7 @@ class _JobDescriptionState extends State<JobDescription> {
                     size: 20,
                   ),
                   label: Text(
-                    _isExpanded ? 'Voir moins' : 'Voir plus',
+                    _isExpanded ? 'Read Less' : 'Read More',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -71,5 +68,4 @@ class _JobDescriptionState extends State<JobDescription> {
       ),
     );
   }
-
 }

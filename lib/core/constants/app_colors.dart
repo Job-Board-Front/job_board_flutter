@@ -27,7 +27,12 @@ class AppColors {
   static const Color slate700 = Color(0xFF334155);
   static const Color slate800 = Color(0xFF1E293B); // Dark Card bg
   static const Color slate850 = Color(0xFF1A202C); // Darker Card bg
-  static const Color slate900 = Color(0xFF0F172A); // Dark Scaffold bg
+  static const Color slate900 = Color.fromARGB(
+    255,
+    21,
+    28,
+    43,
+  ); // Dark Scaffold bg
 
   // --- Semantic Colors ---
   static const Color error = Color(0xFFEF4444);

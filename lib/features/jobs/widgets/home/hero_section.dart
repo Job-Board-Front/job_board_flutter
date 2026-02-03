@@ -21,11 +21,7 @@ class HeroSection extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.star,
-                size: 16,
-                color: theme.colorScheme.primary,
-              ),
+              Icon(Icons.star, size: 16, color: theme.colorScheme.primary),
               const SizedBox(width: 8),
               Text(
                 'Your career journey starts here',
@@ -52,7 +48,7 @@ class HeroSection extends StatelessWidget {
 
         Text(
           'Discover opportunities from top companies around the world. '
-              'Connect with employers and take the next step in your career.',
+          'Connect with employers and take the next step in your career.',
           style: theme.textTheme.bodyLarge?.copyWith(
             color: Colors.grey[600],
             height: 1.5,
@@ -63,34 +59,32 @@ class HeroSection extends StatelessWidget {
 
         Row(
           children: [
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
+            Expanded(
+              // Added Expanded
+              child: ElevatedButton.icon(
+                onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const JobsPage()),
-                );
-              },
-              icon: const Icon(Icons.arrow_forward),
-              label: const Text('Browse All Jobs'),
-              style: ElevatedButton.styleFrom(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                textStyle:
-                const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                icon: const Icon(Icons.arrow_forward),
+                label: const Text('Browse All Jobs'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 14,
+                  ), // Removed horizontal padding
+                ),
               ),
             ),
             const SizedBox(width: 16),
-            OutlinedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/signup');
-              },
-              style: OutlinedButton.styleFrom(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                textStyle:
-                const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            Expanded(
+              // Added Expanded
+              child: OutlinedButton(
+                onPressed: () => Navigator.pushNamed(context, '/signup'),
+                child: const Text('Create Account'),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
               ),
-              child: const Text('Create Account'),
             ),
           ],
         ),

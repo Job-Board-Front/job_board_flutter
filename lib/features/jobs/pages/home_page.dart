@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     final repository = JobRepository();
     cubit = JobsCubit(repository: repository);
-    cubit.loadJobs(filters: JobSearchFilters(limit: 3));
+    cubit.updateFilter("limit", "3");
   }
 
   @override
