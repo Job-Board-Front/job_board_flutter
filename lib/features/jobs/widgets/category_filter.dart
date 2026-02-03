@@ -8,10 +8,7 @@ class CategoryFilter extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Filter by',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        const Text('Filter by', style: TextStyle(fontWeight: FontWeight.bold)),
         const SizedBox(height: 12),
 
         Wrap(
@@ -32,15 +29,12 @@ class CategoryFilter extends StatelessWidget {
     return SizedBox(
       width: 160,
       child: DropdownButtonFormField<String>(
-        value: items.first,
         decoration: InputDecoration(
           labelText: label,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),
         items: items
-            .map(
-              (e) => DropdownMenuItem(value: e, child: Text(e)),
-        )
+            .map((e) => DropdownMenuItem(value: e, child: Text(e)))
             .toList(),
         onChanged: (_) {},
       ),

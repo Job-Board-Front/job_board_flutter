@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:job_board_flutter/core/bloc/cubit/theme_cubit.dart';
-import 'package:job_board_flutter/core/widgets/app_drawer.dart';
-import 'package:job_board_flutter/core/widgets/app_navbar.dart';
 import 'package:job_board_flutter/features/jobs/bloc/job-details/job_details_cubit.dart';
-import 'package:job_board_flutter/features/jobs/data/datasources/job_remote_datasource.dart';
 import 'package:job_board_flutter/features/jobs/data/repositories/job_repository.dart';
 import 'package:job_board_flutter/features/jobs/pages/job_details_page.dart';
 import 'package:job_board_flutter/utils/theme/dark_theme.dart';
 import 'package:job_board_flutter/utils/theme/light_theme.dart';
 
 import 'features/jobs/pages/home_page.dart';
-import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
-      create: (context) => JobRepository(JobRemoteDataSource(http.Client())),
+      create: (context) => JobRepository(),
       child: BlocProvider(
         create: (context) => ThemeCubit()..loadTheme(),
         child: BlocConsumer<ThemeCubit, ThemeState>(

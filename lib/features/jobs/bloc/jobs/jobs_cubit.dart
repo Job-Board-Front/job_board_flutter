@@ -11,7 +11,9 @@ class JobsCubit extends Cubit<JobsState> {
   Future<void> loadJobs({JobSearchFilters? filters}) async {
     try {
       emit(state.copyWith(isLoading: true, error: null, jobs: []));
-      final response = await repository.getJobsPaginated(filters: filters);
+      final response = await repository.getJobsPaginated(
+        filters ?? JobSearchFilters(),
+      );
       emit(
         state.copyWith(
           isLoading: false,
@@ -41,7 +43,7 @@ class JobsCubit extends Cubit<JobsState> {
         cursor: state.nextCursor,
       );
 
-      final response = await repository.getJobsPaginated(filters: newFilters);
+      final response = await repository.getJobsPaginated(newFilters);
 
       emit(
         state.copyWith(

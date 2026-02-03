@@ -5,10 +5,7 @@ import 'job_card.dart';
 class JobList extends StatelessWidget {
   final List<Job> jobs;
 
-  const JobList({
-    super.key,
-    required this.jobs,
-  });
+  const JobList({super.key, required this.jobs});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +13,7 @@ class JobList extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: jobs.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      separatorBuilder: (_, _) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         return JobCard(job: jobs[index]);
       },

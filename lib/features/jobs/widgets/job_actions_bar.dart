@@ -38,14 +38,14 @@ class JobActionsBar extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: canApply
                       ? () async {
-                    final uri = Uri.tryParse(submissionLink!);
-                    if (uri != null) {
-                      await launchUrl(
-                        uri,
-                        mode: LaunchMode.externalApplication,
-                      );
-                    }
-                  }
+                          final uri = Uri.tryParse(submissionLink!);
+                          if (uri != null) {
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          }
+                        }
                       : null,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -66,26 +66,28 @@ class JobActionsBar extends StatelessWidget {
               const SizedBox(width: 16),
 
               // Bookmark button
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.blueAccent.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Colors.blueAccent.withOpacity(0.3),
-                    width: 1.5,
+              SizedBox(
+                width: 56,
+                height: 56,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blueAccent.withValues(blue: 0xFF),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Colors.blueAccent.withValues(blue: 0xFF),
+                      width: 1.5,
+                    ),
                   ),
-                ),
-                child: IconButton(
-                  onPressed: onBookmarkTap,
-                  icon: Icon(
-                    isBookmarked
-                        ? Icons.bookmark
-                        : Icons.bookmark_border,
-                    color: Colors.blueAccent,
+                  child: IconButton(
+                    onPressed: onBookmarkTap,
+                    icon: Icon(
+                      isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                      color: Colors.blueAccent,
+                    ),
+                    tooltip: isBookmarked ? 'Remove bookmark' : 'Bookmark',
+                    iconSize: 24,
+                    padding: const EdgeInsets.all(12),
                   ),
-                  tooltip: isBookmarked ? 'Remove bookmark' : 'Bookmark',
-                  iconSize: 24,
-                  padding: const EdgeInsets.all(12),
                 ),
               ),
             ],

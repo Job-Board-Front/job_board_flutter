@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import '../../../core/widgets/app_drawer.dart';
 import '../../../core/widgets/app_navbar.dart';
 import '../bloc/jobs/jobs_cubit.dart';
 import '../bloc/jobs/jobs_state.dart';
-import '../data/datasources/job_remote_datasource.dart';
 import '../data/repositories/job_repository.dart';
 import '../widgets/job_list.dart';
 import '../widgets/job_search.dart';
@@ -27,7 +25,7 @@ class _JobsPageState extends State<JobsPage> {
     super.initState();
 
     // Initialise le repository + datasource
-    final repository = JobRepository(JobRemoteDataSource(http.Client()));
+    final repository = JobRepository();
     cubit = JobsCubit(repository: repository);
 
     cubit.loadJobs(); // charge la première page

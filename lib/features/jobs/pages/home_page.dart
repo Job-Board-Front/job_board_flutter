@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:job_board_flutter/features/jobs/data/models/job_model.dart';
 import '../../../core/widgets/app_drawer.dart';
 import '../../../core/widgets/app_navbar.dart';
 import '../bloc/jobs/jobs_cubit.dart';
 import '../bloc/jobs/jobs_state.dart';
-import '../data/datasources/job_remote_datasource.dart';
 import '../data/repositories/job_repository.dart';
 import '../widgets/home/hero_section.dart';
 import '../widgets/job_card.dart';
-import '../widgets/job_search.dart';
 import 'jobs_page.dart';
-import 'package:job_board_flutter/core/bloc/cubit/theme_cubit.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    final repository = JobRepository(JobRemoteDataSource(http.Client()));
+    final repository = JobRepository();
     cubit = JobsCubit(repository: repository);
     cubit.loadJobs(filters: JobSearchFilters(limit: 3));
   }
