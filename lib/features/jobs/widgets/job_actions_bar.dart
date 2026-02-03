@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:job_board_flutter/core/constants/app_colors.dart';
+import 'package:job_board_flutter/features/jobs/data/models/job_model.dart';
+import 'package:job_board_flutter/features/jobs/widgets/job_bookmark_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class JobActionsBar extends StatelessWidget {
-  final String? submissionLink;
+  final Job job;
   final VoidCallback? onBookmarkTap;
   final bool isBookmarked;
 
   const JobActionsBar({
     super.key,
-    required this.submissionLink,
+    required this.job,
     this.onBookmarkTap,
     this.isBookmarked = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final canApply = submissionLink != null && submissionLink!.isNotEmpty;
+    final canApply =
+        job.submissionLink != null && job.submissionLink!.isNotEmpty;
 
     return Container(
       decoration: BoxDecoration(
@@ -39,7 +41,7 @@ class JobActionsBar extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: canApply
                       ? () async {
-                          final uri = Uri.tryParse(submissionLink!);
+                          final uri = Uri.tryParse(job.submissionLink!);
                           if (uri != null) {
                             await launchUrl(
                               uri,
@@ -67,30 +69,7 @@ class JobActionsBar extends StatelessWidget {
               const SizedBox(width: 16),
 
               // Bookmark button
-              SizedBox(
-                width: 56,
-                height: 56,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent.withValues(blue: 0xFF),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Colors.blueAccent.withValues(blue: 0xFF),
-                      width: 1.5,
-                    ),
-                  ),
-                  child: IconButton(
-                    onPressed: onBookmarkTap,
-                    icon: Icon(
-                      isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-                      color: AppColors.slate50,
-                    ),
-                    tooltip: isBookmarked ? 'Remove bookmark' : 'Bookmark',
-                    iconSize: 24,
-                    padding: const EdgeInsets.all(12),
-                  ),
-                ),
-              ),
+              SizedBox(width: 56, height: 56, child: BookmarkButton(job: job)),
             ],
           ),
         ),

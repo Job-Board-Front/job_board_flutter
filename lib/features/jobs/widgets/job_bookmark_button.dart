@@ -10,29 +10,9 @@ class BookmarkButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isBookmarked = context.select<BookmarksCubit, bool>((cubit) {
-      final state = cubit.state;
-
-      if (state is BookmarksLoaded) {
-        // --- DEBUG PRINT START ---
-        // Uncomment this if you want to see every check (can be spammy)
-
-        if (state.bookmarks.isNotEmpty) {
-          final firstId = state.bookmarks.first.id;
-          print(
-            "Checking Job ID: '${job.id}' (${job.id.runtimeType}) vs Bookmark ID: '$firstId' (${firstId.runtimeType})",
-          );
-        }
-
-        // --- DEBUG PRINT END ---
-
-        // Force both to String and trim to be absolutely safe
-        return state.bookmarks.any(
-          (b) => b.id.toString().trim() == job.id.toString().trim(),
-        );
-      }
-      return false;
-    });
+    final isBookmarked = context.select<BookmarksCubit, bool>(
+      (cubit) => cubit.isBookmarked(job.id),
+    );
 
     return IconButton(
       icon: Icon(
@@ -40,6 +20,7 @@ class BookmarkButton extends StatelessWidget {
         color: isBookmarked ? Colors.blue : Colors.grey,
       ),
       onPressed: () {
+        // 2. Call the dedicated BookmarksCubit to toggle
         context.read<BookmarksCubit>().toggleBookmark(job);
       },
     );

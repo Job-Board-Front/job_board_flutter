@@ -98,7 +98,7 @@ class JobDetailsPage extends StatelessWidget {
                 right: 0,
                 bottom: 0,
                 child: JobActionsBar(
-                  submissionLink: job.submissionLink,
+                  job: job,
                   isBookmarked: false, // later from Bloc / state
                   onBookmarkTap: () {
                     print('Bookmark tapped for ${job.title}');

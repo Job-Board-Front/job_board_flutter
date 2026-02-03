@@ -19,6 +19,7 @@ class BookmarksRepository {
 
   Future<void> fetchBookmarks() async {
     try {
+      print('🔎 Fetching bookmarks');
       final bookmarks = await _remoteDataSource.getUserBookmarks();
       _bookmarksSubject.add(bookmarks);
       print('🔎 Fetched bookmarks: ${_bookmarksSubject.value.length}');
@@ -29,7 +30,9 @@ class BookmarksRepository {
   }
 
   bool isJobBookmarked(String jobId) {
-    return _bookmarksSubject.value.any((job) => job.id == jobId);
+    final bookmarked = _bookmarksSubject.value.any((job) => job.id == jobId);
+    print('🔎 Is bookmarked: ${_bookmarksSubject.value}');
+    return bookmarked;
   }
 
   Future<void> toggleBookmark(Job job) async {
