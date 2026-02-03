@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:job_board_flutter/core/constants/app_colors.dart';
+import 'package:job_board_flutter/features/bookmarks/pages/bookmarks_page.dart';
 import 'package:job_board_flutter/features/jobs/pages/home_page.dart';
 import 'package:job_board_flutter/features/jobs/pages/jobs_page.dart';
 
@@ -147,7 +148,7 @@ class AppDrawer extends StatelessWidget {
                         );
                       },
                     ),
-                    if (isLoggedIn) // Only show Bookmarked if logged in
+                    if (isLoggedIn)
                       ListTile(
                         leading: Icon(
                           Icons.bookmark_rounded,
@@ -155,9 +156,15 @@ class AppDrawer extends StatelessWidget {
                               ? Colors.white
                               : Theme.of(context).primaryColor,
                         ),
-                        title: const Text('Bookmarked'),
+                        title: const Text('Bookmarks'),
                         onTap: () {
                           Navigator.pop(context);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const BookmarksPage(),
+                            ),
+                          );
                         },
                       ),
                   ],

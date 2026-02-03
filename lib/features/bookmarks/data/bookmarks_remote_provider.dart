@@ -24,7 +24,7 @@ class BookmarksRemoteDataSourceProvider {
     if (kDebugMode) {
       dio.interceptors.add(DioLoggingInterceptor());
     }
-    dio.interceptors.add(DioCacheInterceptor());
+
     dio.interceptors.add(DioAuthInterceptor(FirebaseTokenProvider()));
 
     return dio;
