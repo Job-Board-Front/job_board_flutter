@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:job_board_flutter/features/auth/bloc/auth_cubit.dart';
+import 'package:job_board_flutter/features/auth/bloc/auth_state.dart';
 import 'package:job_board_flutter/features/jobs/data/models/job_model.dart';
 import '../../../core/widgets/app_drawer.dart';
 import '../../../core/widgets/app_navbar.dart';
@@ -29,10 +31,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     final repository = JobRepository(JobRemoteDataSource(http.Client()));
     cubit = JobsCubit(repository: repository);
-    cubit.loadJobs(
-      filters: JobSearchFilters(limit: 3),
-    );
-
+    cubit.loadJobs(filters: JobSearchFilters(limit: 3));
   }
 
   @override
@@ -42,78 +41,90 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppNavbar(),
         drawer: AppDrawer(),
-        body: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: BlocBuilder<JobsCubit, JobsState>(
-            builder: (context, state) {
-              if (state.isLoading && state.jobs.isEmpty) {
-                return const Center(child: CircularProgressIndicator());
-              }
+        body: BlocListener<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state is AuthError) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: BlocBuilder<JobsCubit, JobsState>(
+              builder: (context, state) {
+                if (state.isLoading && state.jobs.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-              if (state.error != null && state.jobs.isEmpty) {
-                return Center(child: Text('Error: ${state.error}'));
-              }
+                if (state.error != null && state.jobs.isEmpty) {
+                  return Center(child: Text('Error: ${state.error}'));
+                }
 
-              final jobs = state.jobs;
+                final jobs = state.jobs;
 
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    HeroSection(),
-                    SizedBox(height: 48),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Recent Job Offers',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Latest opportunities posted',
-                              style: TextStyle(color: Colors.grey[500]),
-                            ),
-                          ],
-                        ),
-                        TextButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => const JobsPage()),
-                            );
-                          },
-                          icon: const Icon(Icons.arrow_forward, color: Colors.blue),
-                          label: const Text(
-                            'View All',
-                            style: TextStyle(color: Colors.blue),
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      HeroSection(),
+                      SizedBox(height: 48),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Recent Job Offers',
+                                style: Theme.of(context).textTheme.titleLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Latest opportunities posted',
+                                style: TextStyle(color: Colors.grey[500]),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Column(
-                      children: jobs
-                          .map(
-                            (job) => Padding(
-                          padding:
-                          const EdgeInsets.symmetric(vertical: 8.0),
-                          child: JobCard(job: job),
-                        ),
-                      )
-                          .toList(),
-                    ),
-                  ],
-                ),
-              );
-            },
+                          TextButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const JobsPage(),
+                                ),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.arrow_forward,
+                              color: Colors.blue,
+                            ),
+                            label: const Text(
+                              'View All',
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Column(
+                        children: jobs
+                            .map(
+                              (job) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0,
+                                ),
+                                child: JobCard(job: job),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

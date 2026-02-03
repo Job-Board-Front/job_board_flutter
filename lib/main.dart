@@ -1,19 +1,24 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 import 'package:job_board_flutter/core/bloc/cubit/theme_cubit.dart';
-import 'package:job_board_flutter/core/widgets/app_drawer.dart';
-import 'package:job_board_flutter/core/widgets/app_navbar.dart';
+import 'package:job_board_flutter/features/auth/bloc/auth_cubit.dart';
+import 'package:job_board_flutter/features/auth/services/auth_service.dart';
 import 'package:job_board_flutter/features/jobs/bloc/job_details_cubit.dart';
 import 'package:job_board_flutter/features/jobs/data/datasources/job_remote_datasource.dart';
 import 'package:job_board_flutter/features/jobs/data/repositories/job_repository.dart';
+import 'package:job_board_flutter/features/jobs/pages/home_page.dart';
 import 'package:job_board_flutter/features/jobs/pages/job_details_page.dart';
+import 'package:job_board_flutter/features/auth/pages/login_page.dart';
+import 'package:job_board_flutter/features/auth/pages/register_page.dart';
 import 'package:job_board_flutter/utils/theme/dark_theme.dart';
 import 'package:job_board_flutter/utils/theme/light_theme.dart';
+import 'firebase_options.dart';
 
-import 'features/jobs/pages/home_page.dart';
-import 'package:http/http.dart' as http;
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -22,31 +27,43 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => JobRepository(
-        JobRemoteDataSource(http.Client()),
-      ),
-      child: BlocProvider(
-        create: (context) => ThemeCubit()..loadTheme(),
+    final authService = AuthService();
+
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<AuthService>(create: (_) => authService),
+        RepositoryProvider(
+          create: (_) => JobRepository(JobRemoteDataSource(http.Client())),
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => AuthCubit(authService)),
+          BlocProvider(create: (_) => ThemeCubit()..loadTheme()),
+        ],
         child: BlocConsumer<ThemeCubit, ThemeState>(
-          listener: (context, state) => {},
-          builder: (context, state) {
+          listener: (_, __) {},
+          builder: (context, themeState) {
             return MaterialApp(
-              title: 'Job Board Flutter',
+              title: 'Job Board',
               debugShowCheckedModeBanner: false,
               theme: AppLightTheme.lightTheme,
               darkTheme: AppDarkTheme.darkTheme,
-              themeMode: state.themeMode,
+              themeMode: themeState.themeMode,
+              // ERROR FIX: We use 'home' for the default route ('/')
+              // Do NOT add '/' to the routes map below.
               home: const HomePage(),
+              routes: {
+                '/login': (_) => const LoginPage(),
+                '/register': (_) => const RegisterPage(),
+              },
               onGenerateRoute: (settings) {
                 if (settings.name == '/job-details') {
-                  final jobId = settings.arguments as String;
-
                   return MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => JobDetailsCubit(
-                        repository: RepositoryProvider.of<JobRepository>(context),
-                      )..loadJobDetails(jobId),
+                    builder: (_) => BlocProvider(
+                      create: (_) => JobDetailsCubit(
+                        repository: RepositoryProvider.of(context),
+                      )..loadJobDetails(settings.arguments as String),
                       child: const JobDetailsPage(),
                     ),
                   );
@@ -60,5 +77,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
