@@ -67,6 +67,49 @@ class Job {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'company': company,
+      'location': location,
+      'employmentType': _employmentTypeToString(employmentType),
+      'experienceLevel': _experienceLevelToString(experienceLevel),
+      'salaryRange': salaryRange,
+      'techStack': techStack,
+      'keywords': keywords,
+      'source': source,
+      'isActive': isActive,
+      'expiresAt': expiresAt.toIso8601String(),
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
+      'logoUrl': logoUrl,
+      'submissionLink': submissionLink,
+    };
+  }
+
+  // Helpers to convert Enums back to the String format your API expects
+  static String _employmentTypeToString(EmploymentType type) {
+    switch (type) {
+      case EmploymentType.fullTime:
+        return 'full-time'; // Assuming API expects this kebab-case based on your parser
+      case EmploymentType.partTime:
+        return 'part-time';
+      case EmploymentType.contract:
+        return 'contract';
+      case EmploymentType.internship:
+        return 'internship';
+    }
+  }
+
+  static String _experienceLevelToString(ExperienceLevel level) {
+    return level
+        .toString()
+        .split('.')
+        .last; // Returns 'junior', 'mid', 'senior'
+  }
+
   static EmploymentType parseEmploymentType(String type) {
     switch (type.toLowerCase()) {
       case 'full-time':

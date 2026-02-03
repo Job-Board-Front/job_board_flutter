@@ -31,9 +31,7 @@ class MyApp extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<AuthService>(create: (_) => authService),
-        RepositoryProvider(
-          create: (_) => JobRepository(JobRemoteDataSource(http.Client())),
-        ),
+        RepositoryProvider(create: (_) => JobRepository()),
       ],
       child: MultiBlocProvider(
         providers: [

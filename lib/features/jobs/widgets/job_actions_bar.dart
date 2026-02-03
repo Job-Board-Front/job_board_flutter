@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:job_board_flutter/core/constants/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class JobActionsBar extends StatelessWidget {
@@ -82,7 +83,7 @@ class JobActionsBar extends StatelessWidget {
                     onPressed: onBookmarkTap,
                     icon: Icon(
                       isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-                      color: Colors.blueAccent,
+                      color: AppColors.slate50,
                     ),
                     tooltip: isBookmarked ? 'Remove bookmark' : 'Bookmark',
                     iconSize: 24,

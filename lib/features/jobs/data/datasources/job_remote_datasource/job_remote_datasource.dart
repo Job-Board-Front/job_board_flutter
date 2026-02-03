@@ -1,8 +1,9 @@
 import 'package:job_board_flutter/features/jobs/data/models/job_filters_model.dart';
+import 'package:job_board_flutter/features/jobs/data/models/job_response/job_response.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
-import '../../../../core/constants/api_constants.dart';
-import '../models/job_model.dart';
+import '../../../../../core/constants/api_constants.dart';
+import '../../models/job_model.dart';
 
 part 'job_remote_datasource.g.dart';
 
@@ -12,7 +13,8 @@ abstract class JobRemoteDataSource {
       _JobRemoteDataSource;
 
   @GET('/jobs')
-  Future<List<Job>> getJobs({
+  Future<JobResponse> getJobs({
+    // Changed from Future<List<Job>>
     @Query('search') String? search,
     @Query('location') String? location,
     @Query('employmentType') String? employmentType,

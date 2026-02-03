@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:job_board_flutter/features/jobs/data/models/job_filters_model.dart';
 
-import '../datasources/job_remote_datasource.dart';
+import '../datasources/job_remote_datasource/job_remote_datasource.dart';
 import '../datasources/job_remote_datasource_provider.dart';
 import '../models/job_model.dart';
 
@@ -19,15 +19,17 @@ class JobRepository {
     String? experienceLevel,
     int? limit,
   }) async {
+    print('🔎 Fetching jobs...');
     try {
-      return await _remoteDataSource.getJobs(
+      return (await _remoteDataSource.getJobs(
         search: search,
         location: location,
         employmentType: employmentType,
         experienceLevel: experienceLevel,
         limit: limit,
-      );
+      )).data;
     } on DioException catch (e) {
+      print(e);
       throw _handleDioException(e);
     }
   }

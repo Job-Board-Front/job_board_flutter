@@ -22,7 +22,7 @@ class _JobRemoteDataSource implements JobRemoteDataSource {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<List<Job>> getJobs({
+  Future<JobResponse> getJobs({
     String? search,
     String? location,
     String? employmentType,
@@ -42,7 +42,7 @@ class _JobRemoteDataSource implements JobRemoteDataSource {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<List<Job>>(
+    final _options = _setStreamType<JobResponse>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -52,12 +52,10 @@ class _JobRemoteDataSource implements JobRemoteDataSource {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<Job> _value;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late JobResponse _value;
     try {
-      _value = _result.data!
-          .map((dynamic i) => Job.fromJson(i as Map<String, dynamic>))
-          .toList();
+      _value = JobResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
@@ -126,7 +124,8 @@ class _JobRemoteDataSource implements JobRemoteDataSource {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = job;
+    final _data = <String, dynamic>{};
+    _data.addAll(job.toJson());
     final _options = _setStreamType<Job>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
