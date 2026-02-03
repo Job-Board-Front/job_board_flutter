@@ -45,6 +45,8 @@ dependencies:
   equatable: ^2.0.8
   shared_preferences: ^2.5.4
   bloc: ^9.2.0
+  firebase_core: ^2.24.0
+  firebase_auth: ^4.10.0
 
 dev_dependencies:
   flutter_test:
@@ -70,8 +72,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-    - assets/
+  #assets:
+  #  - assets
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
