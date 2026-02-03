@@ -9,6 +9,8 @@ import 'package:job_board_flutter/features/jobs/bloc/job-details/job_details_cub
 import 'package:job_board_flutter/features/jobs/data/repositories/job_repository.dart';
 import 'package:job_board_flutter/features/jobs/pages/home_page.dart';
 import 'package:job_board_flutter/features/jobs/pages/job_details_page.dart';
+import 'package:job_board_flutter/features/jobs/pages/job_create_page.dart';
+import 'package:job_board_flutter/features/jobs/pages/job_edit_page.dart';
 import 'package:job_board_flutter/features/auth/pages/login_page.dart';
 import 'package:job_board_flutter/features/auth/pages/register_page.dart';
 import 'package:job_board_flutter/utils/theme/dark_theme.dart';
@@ -56,12 +58,30 @@ class MyApp extends StatelessWidget {
               },
               onGenerateRoute: (settings) {
                 if (settings.name == '/job-details') {
+                  final jobId = settings.arguments as String;
                   return MaterialPageRoute(
                     builder: (_) => BlocProvider(
-                      create: (_) => JobDetailsCubit(
-                        repository: RepositoryProvider.of(context),
-                      )..loadJobDetails(settings.arguments as String),
+                      create: (_) {
+                        final cubit = JobDetailsCubit(
+                          repository: RepositoryProvider.of(context),
+                        );
+                        // Always reload fresh data when navigating to job details
+                        cubit.loadJobDetails(jobId);
+                        return cubit;
+                      },
                       child: const JobDetailsPage(),
+                    ),
+                  );
+                }
+                if (settings.name == '/job-create') {
+                  return MaterialPageRoute(
+                    builder: (_) => const JobCreatePage(),
+                  );
+                }
+                if (settings.name == '/job-edit') {
+                  return MaterialPageRoute(
+                    builder: (_) => JobEditPage(
+                      jobId: settings.arguments as String,
                     ),
                   );
                 }

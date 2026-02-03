@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:job_board_flutter/core/constants/app_colors.dart';
+import 'package:job_board_flutter/core/guards/role_guard.dart';
 import 'package:job_board_flutter/features/jobs/pages/home_page.dart';
 import 'package:job_board_flutter/features/jobs/pages/jobs_page.dart';
 
@@ -160,6 +161,22 @@ class AppDrawer extends StatelessWidget {
                           Navigator.pop(context);
                         },
                       ),
+                    RoleGuard(
+                      allowedRoles: ['admin'],
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.add_circle_outline_rounded,
+                          color: isDark
+                              ? Colors.white
+                              : Theme.of(context).primaryColor,
+                        ),
+                        title: const Text('Create Job'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, '/job-create');
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),

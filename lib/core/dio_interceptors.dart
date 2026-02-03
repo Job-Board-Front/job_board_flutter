@@ -150,8 +150,9 @@ abstract class TokenProvider {
 
 class DioAuthInterceptor extends Interceptor {
   final TokenProvider tokenProvider;
+  final Dio dio;
 
-  DioAuthInterceptor(this.tokenProvider);
+  DioAuthInterceptor(this.tokenProvider, {required this.dio});
 
   @override
   void onRequest(
@@ -174,17 +175,23 @@ class DioAuthInterceptor extends Interceptor {
           final options = err.requestOptions;
           options.headers['Authorization'] = 'Bearer $newToken';
 
-          final dio = Dio();
+          // Retry the request with the new token using the same Dio instance
           final response = await dio.request(
             options.path,
             data: options.data,
             queryParameters: options.queryParameters,
-            options: Options(method: options.method, headers: options.headers),
+            options: Options(
+              method: options.method,
+              headers: options.headers,
+              extra: options.extra,
+            ),
+            cancelToken: options.cancelToken,
           );
           return handler.resolve(response);
         }
       } catch (e) {
         // Token refresh failed, let the error propagate
+        print('Token refresh failed: $e');
       }
     }
     super.onError(err, handler);
@@ -248,6 +255,13 @@ class DioCacheInterceptor extends Interceptor {
 
   void clearCache() {
     _cache.clear();
+  }
+
+  void clearCacheForPath(String path) {
+    final keysToRemove = _cache.keys.where((key) => key.contains(path)).toList();
+    for (final key in keysToRemove) {
+      _cache.remove(key);
+    }
   }
 }
 

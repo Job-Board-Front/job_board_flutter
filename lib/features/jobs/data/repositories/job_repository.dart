@@ -1,9 +1,12 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:job_board_flutter/features/jobs/data/models/job_filters_model.dart';
 
 import '../datasources/job_remote_datasource/job_remote_datasource.dart';
 import '../datasources/job_remote_datasource_provider.dart';
 import '../models/job_model.dart';
+import '../models/job_dto.dart';
 
 class JobRepository {
   final JobRemoteDataSource _remoteDataSource;
@@ -50,9 +53,23 @@ class JobRepository {
     }
   }
 
-  Future<Job> createJob(Job job) async {
+  Future<String> createJob(CreateJobDto createJobDto) async {
     try {
-      return await _remoteDataSource.createJob(job);
+      final response = await _remoteDataSource.createJob(createJobDto.toJson());
+      final data = response as Map<String, dynamic>;
+      return data['id'] as String;
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
+  Future<Job> updateJob(String id, UpdateJobDto updateJobDto) async {
+    try {
+      final response = await _remoteDataSource.updateJob(id, updateJobDto.toJson());
+      // The API returns { updatedJob: Job, message: string }
+      final data = response as Map<String, dynamic>;
+      final jobData = data['updatedJob'] as Map<String, dynamic>;
+      return Job.fromJson(jobData);
     } on DioException catch (e) {
       throw _handleDioException(e);
     }
@@ -61,6 +78,31 @@ class JobRepository {
   Future<void> deleteJob(String id) async {
     try {
       return await _remoteDataSource.deleteJob(id);
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
+  Future<String> uploadLogo(String jobId, String? filePath, Uint8List? fileBytes) async {
+    try {
+      MultipartFile multipartFile;
+      
+      if (fileBytes != null) {
+        // Web: use bytes directly
+        multipartFile = MultipartFile.fromBytes(
+          fileBytes,
+          filename: 'logo.jpg',
+        );
+      } else if (filePath != null) {
+        // Mobile: use file path
+        multipartFile = await MultipartFile.fromFile(filePath);
+      } else {
+        throw Exception('No file provided for upload');
+      }
+      
+      final response = await _remoteDataSource.uploadLogo(jobId, multipartFile);
+      final data = response as Map<String, dynamic>;
+      return data['logoUrl'] as String;
     } on DioException catch (e) {
       throw _handleDioException(e);
     }
