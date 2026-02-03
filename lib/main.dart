@@ -1,11 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:job_board_flutter/core/bloc/cubit/theme_cubit.dart';
 import 'package:job_board_flutter/features/auth/bloc/auth_cubit.dart';
 import 'package:job_board_flutter/features/auth/services/auth_service.dart';
+import 'package:job_board_flutter/features/bookmarks/cubit/bookmarks_cubit.dart';
+import 'package:job_board_flutter/features/bookmarks/data/repositories/bookmarks_repository.dart';
 import 'package:job_board_flutter/features/jobs/bloc/job-details/job_details_cubit.dart';
+import 'package:job_board_flutter/features/jobs/bloc/jobs/jobs_cubit.dart';
 import 'package:job_board_flutter/features/jobs/data/repositories/job_repository.dart';
 import 'package:job_board_flutter/features/jobs/pages/home_page.dart';
 import 'package:job_board_flutter/features/jobs/pages/job_details_page.dart';
@@ -32,14 +34,25 @@ class MyApp extends StatelessWidget {
       providers: [
         RepositoryProvider<AuthService>(create: (_) => authService),
         RepositoryProvider(create: (_) => JobRepository()),
+        RepositoryProvider(create: (_) => BookmarksRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => AuthCubit(authService)),
           BlocProvider(create: (_) => ThemeCubit()..loadTheme()),
+          BlocProvider(
+            create: (context) =>
+                JobsCubit(repository: context.read<JobRepository>())
+                  ..loadJobs(),
+          ),
+          BlocProvider(
+            create: (context) =>
+                BookmarksCubit(context.read<BookmarksRepository>())
+                  ..loadBookmarks(),
+          ),
         ],
         child: BlocConsumer<ThemeCubit, ThemeState>(
-          listener: (_, __) {},
+          listener: (_, _) {},
           builder: (context, themeState) {
             return MaterialApp(
               title: 'Job Board',

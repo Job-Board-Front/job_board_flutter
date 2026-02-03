@@ -12,7 +12,7 @@ part of 'job_remote_datasource.dart';
 
 class _JobRemoteDataSource implements JobRemoteDataSource {
   _JobRemoteDataSource(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'http://10.0.2.2:3000/api';
+    baseUrl ??= 'http://localhost:3000/api';
   }
 
   final Dio _dio;
