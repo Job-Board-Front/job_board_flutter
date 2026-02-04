@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:job_board_flutter/features/auth/bloc/auth_cubit.dart';
 import 'package:job_board_flutter/features/auth/bloc/auth_state.dart';
+import 'package:job_board_flutter/features/bookmarks/cubit/bookmarks_cubit.dart';
 import '../../../core/widgets/app_drawer.dart';
 import '../../../core/widgets/app_navbar.dart';
 import '../bloc/jobs/jobs_cubit.dart';
@@ -20,6 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final JobsCubit cubit;
+  late final BookmarksCubit bookmarksCubit;
 
   @override
   void initState() {
@@ -27,6 +29,8 @@ class _HomePageState extends State<HomePage> {
     final repository = JobRepository();
     cubit = JobsCubit(repository: repository);
     cubit.updateFilter("limit", "3");
+    bookmarksCubit = BookmarksCubit(RepositoryProvider.of(context));
+    bookmarksCubit.loadBookmarks();
   }
 
   @override

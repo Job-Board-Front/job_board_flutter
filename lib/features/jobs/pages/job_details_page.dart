@@ -179,13 +179,7 @@ class JobDetailsPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    JobActionsBar(
-                      submissionLink: job.submissionLink,
-                      isBookmarked: false, // later from Bloc / state
-                      onBookmarkTap: () {
-                        print('Bookmark tapped for ${job.title}');
-                      },
-                    ),
+                    JobActionsBar(job: job),
                   ],
                 ),
               ),

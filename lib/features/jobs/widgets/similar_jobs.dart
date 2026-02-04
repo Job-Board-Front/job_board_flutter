@@ -45,12 +45,7 @@ class SimilarJobs extends StatelessWidget {
           itemCount: jobs.length > 3 ? 3 : jobs.length,
           itemBuilder: (context, index) {
             final job = jobs[index];
-            return JobCard(
-              job: job,
-              onTap: () => onJobTap?.call(job),
-              onBookmarkTap: () => onBookmarkTap?.call(job),
-              isBookmarked: bookmarkedJobIds.contains(job.id),
-            );
+            return JobCard(job: job, onTap: () => onJobTap?.call(job));
           },
         ),
 
@@ -69,10 +64,8 @@ class SimilarJobs extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  side: const BorderSide(
-                    color: Color(0xFF60A5FA),
-                    width: 1.5,
-                  ),foregroundColor: const Color(0xFF60A5FA),
+                  side: const BorderSide(color: Color(0xFF60A5FA), width: 1.5),
+                  foregroundColor: const Color(0xFF60A5FA),
                 ),
               ),
             ),

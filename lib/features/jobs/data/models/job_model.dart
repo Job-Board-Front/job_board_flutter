@@ -59,9 +59,6 @@ class Job {
       createdAt: json['createdAt'] != null
           ? DateTime.parse(json['createdAt'])
           : null,
-      updatedAt: json['updatedAt'] != null
-          ? DateTime.parse(json['updatedAt'])
-          : null,
       logoUrl: json['logoUrl'],
       submissionLink: json['submissionLink'],
     );

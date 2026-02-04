@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:job_board_flutter/features/jobs/widgets/job_bookmark_button.dart';
 import '../../../core/utils/url_utils.dart';
 import '../data/models/job_model.dart';
 
 class JobCard extends StatelessWidget {
   final Job job;
   final VoidCallback? onTap;
-  final VoidCallback? onBookmarkTap;
-  final bool isBookmarked;
 
-  const JobCard({
-    Key? key,
-    required this.job,
-    this.onTap,
-    this.onBookmarkTap,
-    this.isBookmarked = false,
-  }) : super(key: key);
+  const JobCard({Key? key, required this.job, this.onTap}) : super(key: key);
 
   String getEmploymentLabel(EmploymentType type) {
     switch (type) {
@@ -59,7 +52,6 @@ class JobCard extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-
     return GestureDetector(
       onTap: onTap,
       child: Card(
@@ -83,44 +75,46 @@ class JobCard extends StatelessWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: const Color(0xFFE2E8F0)),
-
                     ),
                     child: job.logoUrl != null
                         ? ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        absoluteUrl(job.logoUrl!)!,
-                        fit: BoxFit.cover,
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              absoluteUrl(job.logoUrl!)!,
+                              fit: BoxFit.cover,
 
-                        errorBuilder: (_, __, ___) => Center(
-                          child: Text(
-                            job.company
-                                .split(' ')
-                                .map((e) => e[0])
-                                .take(2)
-                                .join(),
-                            style: const TextStyle( fontWeight: FontWeight.bold,
-                              fontSize: 18, color: Color(0xFF94A3B8),
+                              errorBuilder: (_, _, _) => Center(
+                                child: Text(
+                                  job.company
+                                      .split(' ')
+                                      .map((e) => e[0])
+                                      .take(2)
+                                      .join(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Color(0xFF94A3B8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Center(
+                            child: Text(
+                              job.company
+                                  .split(' ')
+                                  .map((e) => e[0])
+                                  .take(2)
+                                  .join(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: isDark
+                                    ? const Color(0xFF94A3B8)
+                                    : Colors.black87,
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    )
-                        : Center(
-                      child: Text(
-                        job.company
-                            .split(' ')
-                            .map((e) => e[0])
-                            .take(2)
-                            .join(),
-                        style:  TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: isDark ? const Color(0xFF94A3B8) : Colors.black87,
-
-                        ),
-                      ),
-                    ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -129,10 +123,12 @@ class JobCard extends StatelessWidget {
                       children: [
                         Text(
                           job.title,
-                          style:  TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: isDark ? const Color(0xFFF1F5F9) : Colors.grey[800],
+                            color: isDark
+                                ? const Color(0xFFF1F5F9)
+                                : Colors.grey[800],
 
                             height: 1.3,
                           ),
@@ -143,27 +139,16 @@ class JobCard extends StatelessWidget {
                         Text(
                           job.company,
                           style: TextStyle(
-                            color: isDark ? const Color(0xFF94A3B8) : Colors.black54,
+                            color: isDark
+                                ? const Color(0xFF94A3B8)
+                                : Colors.black54,
                             fontSize: 14,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  if (onBookmarkTap != null)
-                    IconButton(
-                      onPressed: onBookmarkTap,
-                      icon: Icon(
-                        isBookmarked
-                            ? Icons.bookmark
-                            : Icons.bookmark_outline,
-                        color: isBookmarked
-                            ? const Color(0xFF60A5FA)
-                            : const Color(0xFF64748B),
-                      ),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
+                  BookmarkButton(job: job),
                 ],
               ),
 
@@ -174,7 +159,7 @@ class JobCard extends StatelessWidget {
                 job.description,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style:  TextStyle(
+                style: TextStyle(
                   fontSize: 13,
                   color: isDark ? const Color(0xFFCBD5E1) : Colors.grey[600],
                   height: 1.5,
@@ -241,10 +226,11 @@ class JobCard extends StatelessWidget {
                         Flexible(
                           child: Text(
                             job.location,
-                            style:  TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
-                              color: isDark ? const Color(0xFF94A3B8) : Colors.black87,
-
+                              color: isDark
+                                  ? const Color(0xFF94A3B8)
+                                  : Colors.black87,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -257,11 +243,13 @@ class JobCard extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(6),
-                            color: getEmploymentColor(job.employmentType)
-                                .withOpacity(0.15),
+                            color: getEmploymentColor(
+                              job.employmentType,
+                            ).withOpacity(0.15),
                             border: Border.all(
-                              color: getEmploymentColor(job.employmentType)
-                                  .withOpacity(0.3),
+                              color: getEmploymentColor(
+                                job.employmentType,
+                              ).withOpacity(0.3),
                               width: 1,
                             ),
                           ),
@@ -299,10 +287,12 @@ class JobCard extends StatelessWidget {
                       ),
                       child: Text(
                         job.salaryRange!,
-                        style:  TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: isDark ? const Color(0xFF60A5FA) : Colors.grey[800],
+                          color: isDark
+                              ? const Color(0xFF60A5FA)
+                              : Colors.grey[800],
                         ),
                       ),
                     ),
