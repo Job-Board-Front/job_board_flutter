@@ -34,6 +34,10 @@ class BookmarksRepository {
     print('🔎 Is bookmarked: ${_bookmarksSubject.value}');
     return bookmarked;
   }
+  void clearAllBookmarks() {
+    _bookmarksSubject.add([]); // Vide le BehaviorSubject
+  }
+
 
   Future<void> toggleBookmark(Job job) async {
     final currentList = _bookmarksSubject.value;

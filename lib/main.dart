@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:job_board_flutter/core/bloc/cubit/theme_cubit.dart';
 import 'package:job_board_flutter/features/auth/bloc/auth_cubit.dart';
+import 'package:job_board_flutter/features/auth/bloc/auth_state.dart';
 import 'package:job_board_flutter/features/auth/services/auth_service.dart';
 import 'package:job_board_flutter/features/bookmarks/cubit/bookmarks_cubit.dart';
 import 'package:job_board_flutter/features/bookmarks/data/repositories/bookmarks_repository.dart';
@@ -53,6 +54,21 @@ class MyApp extends StatelessWidget {
                   ..loadBookmarks(),
           ),
         ],
+        child: BlocListener<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state is AuthInitial) {
+              // Réinitialiser les favoris lors du logout
+              context.read<BookmarksCubit>().clearBookmarks();
+
+              // Recharger les jobs pour rafraîchir leur état de bookmark
+              context.read<JobsCubit>().loadJobs();
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => const HomePage()),
+                    (route) => false,
+              );
+
+            }
+          },
         child: BlocConsumer<ThemeCubit, ThemeState>(
           listener: (_, _) {},
           builder: (context, themeState) {
@@ -64,7 +80,25 @@ class MyApp extends StatelessWidget {
               themeMode: themeState.themeMode,
               // ERROR FIX: We use 'home' for the default route ('/')
               // Do NOT add '/' to the routes map below.
-              home: const HomePage(),
+              home: BlocBuilder<AuthCubit, AuthState>(
+                builder: (context, authState) {
+                  if (authState is AuthLoading) {
+                    return const Scaffold(
+                      body: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                  if (authState is AuthSuccess) {
+                    return const HomePage();
+                  }
+
+                  if (authState is AuthInitial) {
+                    return const HomePage();
+                  }
+
+                  // AuthInitial - montrer la page de login
+                  return const HomePage();
+                },
+              ),
               routes: {
                 '/login': (_) => const LoginPage(),
                 '/register': (_) => const RegisterPage(),
@@ -103,6 +137,7 @@ class MyApp extends StatelessWidget {
             );
           },
         ),
+      ),
       ),
     );
   }

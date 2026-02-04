@@ -12,9 +12,43 @@ import '../../features/auth/bloc/auth_state.dart';
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
 
+  String _getCurrentPageName(BuildContext context) {
+    final route = ModalRoute.of(context);
+    if (route != null && route.settings.arguments != null) {
+      return route.settings.arguments as String;
+    }
+
+    // Vérifier le type de widget actuel dans la pile
+    final navigator = Navigator.of(context);
+    final currentRoute = navigator.widget;
+
+    // Utiliser le type de page pour déterminer la page actuelle
+    return 'home'; // valeur par défaut
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    Widget? currentWidget;
+    context.visitAncestorElements((element) {
+      if (element.widget is HomePage) {
+        currentWidget = element.widget;
+        return false;
+      }
+      if (element.widget is JobsPage) {
+        currentWidget = element.widget;
+        return false;
+      }
+      if (element.widget is BookmarksPage) {
+        currentWidget = element.widget;
+        return false;
+      }
+      return true;
+    });
+
+    final isHomePage = currentWidget is HomePage;
+    final isJobsPage = currentWidget is JobsPage;
+    final isBookmarksPage = currentWidget is BookmarksPage;
 
     return Drawer(
       child: BlocBuilder<AuthCubit, AuthState>(
@@ -113,6 +147,7 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
 
+
               Expanded(
                 child: ListView(
                   padding: const EdgeInsets.symmetric(vertical: 8),
@@ -120,12 +155,23 @@ class AppDrawer extends StatelessWidget {
                     ListTile(
                       leading: Icon(
                         Icons.home_rounded,
-                        color: isDark
-                            ? Colors.white
-                            : Theme.of(context).primaryColor,
+                        color: isHomePage
+                            ? (isDark? Colors.white : Theme.of(context).primaryColor)
+                            : (isDark ? Colors.white : Colors.grey[700]),
                       ),
-                      title: const Text('Home'),
-                      onTap: () {
+                      title: Text(
+                        'Home',
+                        style: TextStyle(
+                          fontWeight: isHomePage ? FontWeight.bold : FontWeight.normal,
+                          color: isHomePage ? (isDark? Colors.white : Theme.of(context).primaryColor) : null,
+                        ),
+                      ),
+                      selected: isHomePage,
+                      selectedTileColor: isDark
+                          ? Colors.grey.withOpacity(0.2)
+                          : Theme.of(context).primaryColor.withOpacity(0.1),
+
+                      onTap: isHomePage ? null : () {
                         Navigator.pop(context);
                         Navigator.pushReplacement(
                           context,
@@ -136,12 +182,23 @@ class AppDrawer extends StatelessWidget {
                     ListTile(
                       leading: Icon(
                         Icons.work_rounded,
-                        color: isDark
-                            ? Colors.white
-                            : Theme.of(context).primaryColor,
+                        color: isJobsPage
+                            ? (isDark?Colors.white:Theme.of(context).primaryColor)
+                            : (isDark ? Colors.white : Colors.grey[700]),
                       ),
-                      title: const Text('Jobs'),
-                      onTap: () {
+                      title: Text(
+                        'Jobs',
+                        style: TextStyle(
+                          fontWeight: isJobsPage ? FontWeight.bold : FontWeight.normal,
+                          color: isJobsPage ? (isDark? Colors.white : Theme.of(context).primaryColor) : null,
+                        ),
+                      ),
+                      selected: isJobsPage,
+                      selectedTileColor: isDark
+                          ? Colors.grey.withOpacity(0.2)
+                          : Theme.of(context).primaryColor.withOpacity(0.1),
+
+                      onTap: isJobsPage ? null : () {
                         Navigator.pop(context);
                         Navigator.pushReplacement(
                           context,
@@ -153,12 +210,23 @@ class AppDrawer extends StatelessWidget {
                       ListTile(
                         leading: Icon(
                           Icons.bookmark_rounded,
-                          color: isDark
-                              ? Colors.white
-                              : Theme.of(context).primaryColor,
+                          color: isBookmarksPage
+                              ? (isDark?Colors.white:Theme.of(context).primaryColor)
+                              : (isDark ? Colors.white : Colors.grey[700]),
                         ),
-                        title: const Text('Bookmarks'),
-                        onTap: () {
+                        title: Text(
+                          'Bookmarks',
+                          style: TextStyle(
+                            fontWeight: isBookmarksPage ? FontWeight.bold : FontWeight.normal,
+                            color: isBookmarksPage ? (isDark? Colors.white : Theme.of(context).primaryColor)  : null,
+                          ),
+                        ),
+                        selected: isBookmarksPage,
+                        selectedTileColor: isDark
+                            ? Colors.grey.withOpacity(0.2)
+                            : Theme.of(context).primaryColor.withOpacity(0.1),
+
+                        onTap: isBookmarksPage ? null : () {
                           Navigator.pop(context);
                           Navigator.pushReplacement(
                             context,
@@ -173,9 +241,7 @@ class AppDrawer extends StatelessWidget {
                       child: ListTile(
                         leading: Icon(
                           Icons.add_circle_outline_rounded,
-                          color: isDark
-                              ? Colors.white
-                              : Theme.of(context).primaryColor,
+                          color: isDark ? Colors.white : Colors.grey[700],
                         ),
                         title: const Text('Create Job'),
                         onTap: () {

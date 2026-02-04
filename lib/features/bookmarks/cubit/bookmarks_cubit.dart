@@ -44,4 +44,10 @@ class BookmarksCubit extends Cubit<BookmarksState> {
   bool isBookmarked(String jobId) {
     return _repository.isJobBookmarked(jobId);
   }
+  void clearBookmarks() {
+    _repository.clearAllBookmarks(); // Appeler la méthode du repository
+    emit(BookmarksInitial()); // Réinitialiser l'état
+  }
+
+
 }
